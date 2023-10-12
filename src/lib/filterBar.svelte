@@ -49,7 +49,7 @@
     filterBar {
         position: relative;
         height: 75px;
-        width: 100%;
+        width: fit-content;
         display: flex;
         flex-direction: row;
         overflow-x: scroll;
@@ -58,6 +58,7 @@
         -ms-overflow-style: none;
         pointer-events: auto;
         z-index: 2;
+        padding: 0 var(--spacing);
 
         &::-webkit-scrollbar {
             display: none;

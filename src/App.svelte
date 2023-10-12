@@ -4,6 +4,7 @@
   import L from 'leaflet';
   import 'leaflet/dist/leaflet.css';
   import SearchContainer from './lib/searchContainer.svelte';
+  import BottomContainer from './lib/bottomContainer.svelte';
 
   let map;
 
@@ -12,17 +13,16 @@
   onMount(() => {
     map = L.map('map', { zoomControl: false }).setView(coord, 13);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
   });
 </script>
 
 <main>
+  <div id="map"></div>
   <div id="container">
     <SearchContainer/>
+    <BottomContainer/>
   </div>
-  <div id="map"></div>
 </main>
 
 <style lang="scss">
@@ -46,6 +46,11 @@
       left: 0;
       z-index: 1;
       pointer-events: none;
+    }
+
+    :global(BottomContainer){
+      position: absolute;
+      bottom: 0;
     }
   }
 </style>
