@@ -7,21 +7,46 @@
   import BottomContainer from './lib/bottomContainer.svelte';
 
   let map;
-
+  let isMouseDown = false;
+  let dragging = false;
+  let startDragPoint = null;
   const coord = [47.4713730268945, -0.5523281365745003];
+  const dragDistance = 100;
 
   onMount(() => {
     map = L.map('map', { zoomControl: false }).setView(coord, 13);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    map.on('mousedown', (e) => {
+      isMouseDown = true;
+      startDragPoint = map.mouseEventToContainerPoint(e.originalEvent);
+    });
+    map.on('mouseup', () => {
+      isMouseDown = false;
+      dragging = false;
+      startDragPoint = null;
+    });
+    map.on('mousemove', (e) => {
+      if (isMouseDown && !dragging && startDragPoint) {
+        const currentPoint = map.mouseEventToContainerPoint(e.originalEvent);
+        const distance = startDragPoint.distanceTo(currentPoint);
+        if (distance >= dragDistance) {
+          dragging = true;
+        }
+      }
+      if (dragging) {
+        console.log(`Mouse position: ${e.latlng}`);
+      }
+    });
   });
 </script>
+
 
 <main>
   <div id="map"></div>
   <div id="container">
-    <SearchContainer/>
-    <BottomContainer/>
+    <SearchContainer classComponent="{dragging ? 'onDragSearchContainer' : ''}"/>
+    <BottomContainer classComponent="{dragging ? 'onDragBottomContainer' : ''}"/>
   </div>
 </main>
 
@@ -52,5 +77,23 @@
       position: absolute;
       bottom: 0;
     }
+  }
+
+  :global(.onDragSearchContainer){
+    transform: translateY(-250px);
+    transition: transform .5s;
+  }
+
+  :global(.onDragBottomContainer){
+    transform: translateY(600px);
+    transition: transform .5s;
+  }
+
+  :global(SearchContainer){
+    transition: transform .5s;
+  }
+
+  :global(BottomContainer){
+    transition: transform .5s;
   }
 </style>

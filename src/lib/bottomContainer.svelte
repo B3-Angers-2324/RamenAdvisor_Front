@@ -1,9 +1,10 @@
 <script>
     import NavBar from "./navBar.svelte";
     import RestaurantCard from "./restaurantCard.svelte";
+    export let classComponent ='';
   </script>
   
-  <bottomContainer>
+  <bottomContainer class="{classComponent}">
       <div id="restaurantContainer">
           <RestaurantCard image="./src/assets/restaurant.png" type="local_pizza" name="Pizza del Papa" note="4.4"/>
           <RestaurantCard image="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_1280.jpg" type="lunch_dining" name="Bobo Burger's" note="3.9"/>

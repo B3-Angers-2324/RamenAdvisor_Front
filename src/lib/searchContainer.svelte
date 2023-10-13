@@ -4,6 +4,7 @@
     let filterBar;
     let input;
     let showFilterBar = false;
+    export let classComponent ='';
 
     const handleClickOutside = (event) => {
         if (event.target.tagName !== 'P' && !filterBar.contains(event.target) && event.target !== input) {
@@ -19,7 +20,7 @@
     });
 </script>
 
-<searchContainer>
+<searchContainer class="{classComponent}">
     <div id="container">
         <div id="searchBar">
             <span class="material-symbols-rounded">
