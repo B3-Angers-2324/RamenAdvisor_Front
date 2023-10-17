@@ -4,6 +4,7 @@
     let filterBar;
     let input;
     let showFilterBar = false;
+    export let classComponent ='';
 
     const handleClickOutside = (event) => {
         if (event.target.tagName !== 'P' && !filterBar.contains(event.target) && event.target !== input) {
@@ -19,7 +20,7 @@
     });
 </script>
 
-<searchContainer>
+<searchContainer class="{classComponent}">
     <div id="container">
         <div id="searchBar">
             <span class="material-symbols-rounded">
@@ -41,25 +42,26 @@
         width: 100%;
         height: 15%;
         justify-content: center;
+        position: relative;
 
         #container{
-            margin: var(--spacing);
             height: fit-content;
             width: 100%;
             overflow: hidden;
 
             #searchBar {
+                pointer-events: auto;
                 position: relative;
+                margin: var(--spacing);
                 background-color: var(--brunswick-green);
                 height: 125px;
-                width: calc(100% - var(--spacing));
+                width: calc(100% - var(--spacing) * 3);
                 border-radius: var(--radius);
                 margin-bottom: 20px;
                 display: flex;
                 align-items: center;
                 padding: 0 calc(var(--spacing) / 2);
                 gap: 20px;
-                pointer-events: auto;
                 z-index: 3;
 
                 .material-symbols-rounded{
