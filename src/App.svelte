@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Router, Route } from "svelte-routing";
   //Import components routes
-  import Home from "./routes/Home.svelte";
+  import Home from "./routes/Home/Home.svelte";
   import Profile from "./routes/Profile.svelte";
 
   export let url = "";

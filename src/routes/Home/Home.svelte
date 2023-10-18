@@ -2,8 +2,8 @@
     import { onMount } from 'svelte';
     import L from 'leaflet';
     import 'leaflet/dist/leaflet.css';
-    import SearchContainer from '../lib/searchContainer.svelte';
-    import BottomContainer from '../lib/bottomContainer.svelte';
+    import SearchContainer from '../../lib/searchContainer.svelte';
+    import BottomContainer from './bottomContainer.svelte';
   
     let map;
     let isMouseDown = false;
@@ -34,7 +34,7 @@
           }
         }
         if (dragging) {
-          console.log(`Mouse position: ${e.latlng}`);
+          //console.log(`Mouse position: ${e.latlng}`); ??????????????????????
         }
       });
     });
@@ -46,15 +46,6 @@
     <div id="container">
       <SearchContainer classComponent="{dragging ? 'onDragSearchContainer' : ''}"/>
       <BottomContainer classComponent="{dragging ? 'onDragBottomContainer' : ''}"/>
-      <!--div>
-        <div id="restaurantContainer">
-            <RestaurantCard image="./src/assets/restaurant.png" type="local_pizza" name="Pizza del Papa" note="4.4"/>
-            <RestaurantCard image="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_1280.jpg" type="lunch_dining" name="Bobo Burger's" note="3.9"/>
-            <RestaurantCard image="https://cdn.pixabay.com/photo/2016/11/18/19/13/buildings-1836478_1280.jpg" type="fastfood" name="Oye Papi que bueno" note="4.2"/>
-            <RestaurantCard image="https://cdn.pixabay.com/photo/2020/08/27/07/31/restaurant-5521372_1280.jpg" type="restaurant" name="À la bonne franquette de jackie" note="4.1"/>
-        </div>
-        <NavBar/>
-      </div-->
     </div>
   </main>
   
