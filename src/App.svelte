@@ -2,7 +2,7 @@
   import { Router, Route } from "svelte-routing";
   //Import components routes
   import Home from "./routes/Home.svelte";
-  import Profile from "./routes/Profile.svelte";
+  import Register from "./routes/register.svelte";
 
   export let url = "";
 </script>
@@ -13,7 +13,7 @@
     <div>
       <Route path="/"><Home /></Route>
       <!--Route path="profile/:name" component="{Profile}" / -- Example using variable inside the path -->
-      <Route path="profile/"><Profile /></Route>
+      <Route path="register/"><Register /></Route>
     </div>
   </Router> 
 </main>
