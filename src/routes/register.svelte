@@ -5,10 +5,9 @@
     import logo from '../assets/icon.png';
     import UserInformation from '../lib/userInformation.svelte';
     import CustomInput from '../lib/customInput.svelte';
-    import Home from './Home.svelte';
 
-    let signIn = false;
-    let signUp = true;
+    let signIn = true;
+    let signUp = false;
 
     let toggle = () => {
         signIn = !signIn;
@@ -57,12 +56,12 @@
 
 <style lang="scss">
     main{
-        width: 100vw;
+        width: 100%;
         height: 100vh;
         display: flex;
         justify-content: center;
-        align-items: center;
-        overflow: hidden;
+        padding-bottom: 100px;
+
         position: relative;
 
         .backCircle{
@@ -76,22 +75,23 @@
             overflow: hidden;
             
             .cricle{
-                width: 600px;
-                height: 600px;
+                width: 250px;
+                height: 250px;
                 border-radius: 50%;
                 position: absolute;
                 background-color: var(--brunswick-green);
     
                 &.c1{
-                    left: -10em;
-                    top: -5em;
-                    animation: moveCircle1 40s infinite linear;
+                    left: -100px;
+                    top: -50px;
+                    animation: moveCircle1 60s infinite linear;
                 }
     
                 &.c2{
-                    right: -15em;
-                    bottom: -6em;
-                    animation: moveCircle2 40s infinite linear;
+                    right: -50px;
+                    bottom: -100px;
+                    animation: moveCircle2 60s infinite linear;
+                    animation-delay: 500ms;
                 }
             }
         }
@@ -105,13 +105,13 @@
             justify-content: center;
             z-index: 1;
             padding-bottom: var(--spacing);
-            margin-top: 100px;
+            margin: 100px 0;
             position: relative;
 
             .logoContainer{
                 background-color: var(--bone);
-                width: 200px;
-                height: 200px;
+                width: 100px;
+                height: 100px;
                 position: absolute;
                 transform: translateY(-50%);
                 display: flex;
@@ -120,8 +120,8 @@
                 border-radius: 50%;
 
                 img{
-                    width: 175px;
-                    height: 175px;
+                    width: calc(100%);
+                    height: calc(100%);
                 }
             }
 
@@ -132,9 +132,9 @@
                 height: fit-content;
 
                 h1{
-                    font-size: 2.5em;
+                    font-size: 1.5em;
                     color: var(--brunswick-green);
-                    padding-bottom: 40px;
+                    padding-bottom: 20px;
                     margin-bottom: var(--spacing);
                     border-bottom: 5px solid var(--brunswick-green);
                     box-sizing: border-box;
@@ -155,12 +155,15 @@
                         background-color: var(--brunswick-green);
                         color: var(--bone);
                         border: none;
-                        height: calc(50px + 10px * 2);
+                        height: 2.5em;
                         width: 50%;
-                        font-size: 2em;
+                        font-size: 1.2em;
                         padding: 10px 0;
                         border-radius: var(--radius);
                         cursor: pointer;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
                     }
                 }
             }
@@ -170,11 +173,11 @@
                 bottom: 0;
                 left: 0;
                 width: 100%;
-                padding: 50px;
+                padding: 10px;
                 box-sizing: border-box;
                 display: flex;
                 justify-content: space-between;
-                font-size: 1.25em;
+                font-size: 0.75em;
 
                 a{
                     text-decoration: none;
@@ -188,8 +191,8 @@
             position: absolute;
             top: 0;
             left: 0;
-            padding: 25px;
-            font-size: 5em;
+            padding: 0.25em;
+            font-size: 3.5em;
             color: var(--bone);
             z-index: 2;
             cursor: pointer;

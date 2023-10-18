@@ -41,18 +41,22 @@
                 flex-direction: row;
                 gap: calc(var(--spacing) / 2);
                 width: 100%;
+                margin-bottom: calc(var(--spacing) / 1.25);
             }
 
             button[type="submit"]{
                 background-color: var(--brunswick-green);
                 color: var(--bone);
                 border: none;
-                height: calc(50px + 10px * 2);
+                height: 2.5em;
                 width: 50%;
-                font-size: 2em;
+                font-size: 1.2em;
                 padding: 10px 0;
                 border-radius: var(--radius);
                 cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
         }
     }
