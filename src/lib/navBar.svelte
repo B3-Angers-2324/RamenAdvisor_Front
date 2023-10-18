@@ -1,12 +1,15 @@
 <script>
+    import { Link } from "svelte-routing";
 
 </script>
 
 <navBar>
     <button>
-        <span class="material-symbols-rounded">
-            home
-        </span>
+        <Link to="/">
+            <span class="material-symbols-rounded">
+                home
+            </span>
+        </Link>
     </button>
     <button>
         <span class="material-symbols-rounded">
@@ -14,9 +17,11 @@
         </span>
     </button>
     <button>
-        <span class="material-symbols-rounded">
-            account_circle
-        </span>
+        <Link to="profile/">
+            <span class="material-symbols-rounded">
+                account_circle
+            </span>
+        </Link>
     </button>
 </navBar>
 
