@@ -17,7 +17,7 @@
         </span>
     </button>
     <button>
-        <Link to="profile/">
+        <Link to="register/">
             <span class="material-symbols-rounded">
                 account_circle
             </span>
