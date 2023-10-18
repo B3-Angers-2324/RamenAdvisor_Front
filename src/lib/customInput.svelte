@@ -1,8 +1,8 @@
 <script>
     export let type;
-    export let required;
+    export let required = false;
     export let text;
-    export let showValid;
+    export let showValid = false;
 </script>
 
 <customInput class="inputBox">
@@ -19,25 +19,25 @@
 
         input{
             width: 100%;
-            height: 50px;
+            height: 1.5em;
             padding: 10px;
             border: none;
             background: var(--cambridge-blue);
             border-radius: var(--radius);
             outline: none;
             color: var(--black);
-            font-size: 2em;
+            font-size: 1em;
             font-family: var(--font-family);
             z-index: 1;
 
             &:valid ~ span,
             &:focus ~ span
             {
-                transform: translateY(-75%);
+                transform: translateY(-75%) translateY(.5em);
                 background-color: var(--cambridge-blue);
                 border-radius: var(--radius) var(--radius) 0 0;
-                font-size: 1.5em;
-                padding-bottom: 20px;
+                font-size: 0.75em;
+                padding-bottom: 1.5em;
                 z-index: 0;
             }
         }
@@ -48,7 +48,7 @@
             left: 0;
             padding: 10px;
             color: var(--black);
-            font-size: 2em;
+            font-size: 1em;
             font-family: var(--font-family);
             text-transform: uppercase;
             transition: .25s;
@@ -60,7 +60,7 @@
             transform: translateY(-75%);
             background-color: var(--cambridge-blue);
             border-radius: var(--radius) var(--radius) 0 0;
-            font-size: 1.5em;
+            font-size: 0.75em;
             padding-bottom: 20px;
             z-index: 0;
         }
