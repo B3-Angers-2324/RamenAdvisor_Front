@@ -22,8 +22,8 @@
 
 <style lang="scss">
 restaurantCard{
-    height: 100%;
-    width: 300px;
+    height: 12em;
+    width: 12em;
     background-color: var(--bone);
     flex-shrink: 0;
     border-radius: var(--radius);
@@ -31,6 +31,7 @@ restaurantCard{
     position: relative;
     overflow: visible;
     cursor: pointer;
+    user-select: none;
 
     .info{
         position: absolute;
@@ -49,12 +50,12 @@ restaurantCard{
         }
 
         .material-symbols-rounded{
-            font-size: 50px;
+            font-size: 2em;
             color: var(--brunswick-green);
         }
 
         .note{
-            font-size: 1.5em;
+            font-size: 1.25em;
             font-weight: bold;
             font-family: var(--font-family);
         }
@@ -62,21 +63,23 @@ restaurantCard{
 
     img{
         position: absolute;
-        height: 200px;
-        width: 200px;
+        height: 8em;
+        width: 8em;
         border-radius: var(--radius);
         transform: translateX(-20px) translateY(-20px);
         object-fit: cover;
     }
 
-    .name{
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        padding: 0 20px 12.5% 20px;
-        width: calc(100% - 40px);
-        max-height: 75px;
-        overflow-y: scroll;
-    }
+}
+.name{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 5px 20px 12.5% 20px;
+    width: calc(100% - 40px);
+    max-height: 9em;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    font-size: 0.6em;
 }
 </style>

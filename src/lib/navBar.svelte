@@ -32,7 +32,7 @@
         background-color: var(--brunswick-green);
         display: flex;
         width: calc(100% - var(--spacing) * 2);
-        height: 125px;
+        height: 3.5em;
         justify-content: space-around;
         align-items: center;
         bottom: 0;
@@ -46,7 +46,7 @@
             cursor: pointer;
             
             .material-symbols-rounded{
-                font-size: 75px;
+                font-size: 2em;
                 color: var(--bone);
             }
         }

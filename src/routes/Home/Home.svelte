@@ -1,51 +1,44 @@
 <script>   
-    import { onMount } from 'svelte';
-    import L from 'leaflet';
     import 'leaflet/dist/leaflet.css';
     import SearchContainer from '../../lib/searchContainer.svelte';
-    import BottomContainer from './bottomContainer.svelte';
-  
-    let map;
-    let isMouseDown = false;
+    import NavBar from "../../lib/navBar.svelte";
+    import { API_URL } from "../../main";
+    import RestaurantCard from "../../lib/restaurantCard.svelte";
+    import Map from "../../lib/map.svelte";
     let dragging = false;
-    let startDragPoint = null;
-    const coord = [47.4713730268945, -0.5523281365745003];
-    const dragDistance = 100;
-  
-    onMount(() => {
-      map = L.map('map', { zoomControl: false }).setView(coord, 13);
-  
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-      map.on('mousedown', (e) => {
-        isMouseDown = true;
-        startDragPoint = map.mouseEventToContainerPoint(e.originalEvent);
+
+    //Get the restaurants from the API
+    let restaurants = [];
+    const limit = 5;
+    fetch(`${API_URL}/restaurant/best?limit=${limit}`,{
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        restaurants = data.obj;
+        console.log(restaurants);
       });
-      map.on('mouseup', () => {
-        isMouseDown = false;
-        dragging = false;
-        startDragPoint = null;
-      });
-      map.on('mousemove', (e) => {
-        if (isMouseDown && !dragging && startDragPoint) {
-          const currentPoint = map.mouseEventToContainerPoint(e.originalEvent);
-          const distance = startDragPoint.distanceTo(currentPoint);
-          if (distance >= dragDistance) {
-            dragging = true;
-          }
-        }
-        if (dragging) {
-          //console.log(`Mouse position: ${e.latlng}`); ??????????????????????
-        }
-      });
-    });
   </script>
   
   
   <main>
-    <div id="map"></div> <!-- Conteneriser la map -->
+    <Map bind:dragging/>
     <div id="container">
       <SearchContainer classComponent="{dragging ? 'onDragSearchContainer' : ''}"/>
-      <BottomContainer classComponent="{dragging ? 'onDragBottomContainer' : ''}"/>
+      <bottomContainer class="{dragging ? 'onDragBottomContainer' : ''}">
+        <div id="restaurantContainer">
+          {#each restaurants as restaurant}
+              <RestaurantCard image="{restaurant.image}" type="{restaurant.foodtype}" name="{restaurant.name}" note="{restaurant.note}"/>
+          {/each}
+            <!-- <RestaurantCard image="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_1280.jpg" type="lunch_dining" name="Bobo Burger's" note="3.9"/>
+            <RestaurantCard image="https://cdn.pixabay.com/photo/2016/11/18/19/13/buildings-1836478_1280.jpg" type="fastfood" name="Oye Papi que bueno" note="4.2"/>
+            <RestaurantCard image="https://cdn.pixabay.com/photo/2020/08/27/07/31/restaurant-5521372_1280.jpg" type="restaurant" name="À la bonne franquette de jackie" note="4.1"/> -->
+        </div>
+        <NavBar/>
+    </bottomContainer>
     </div>
   </main>
   
@@ -54,13 +47,6 @@
       background-color: var(--cambridge-blue);
       width: 100vw;
       height: 100vh;
-  
-      #map{
-        width: 100%;
-        height: 100%;
-        position: relative;
-        z-index: 0;
-      }
     
       #container{
         position: absolute;
@@ -72,9 +58,35 @@
         pointer-events: none;
       }
   
-      :global(BottomContainer){
+      BottomContainer{
         position: absolute;
         bottom: 0;
+        display: flex;
+        width: 100%;
+        height: 50%;
+        justify-content: center;
+    
+        #restaurantContainer{
+          position: relative;
+          width: fit-content;
+          display: flex;
+          flex-direction: row;
+          gap: 75px;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          pointer-events: auto;
+          z-index: 2;
+          padding: 20px var(--spacing) 0 var(--spacing);
+          overflow-x: scroll;
+          overflow-y: hidden;
+          margin-bottom: calc(var(--spacing) + 3.5em + calc(var(--spacing) / 2));
+          bottom: 0;
+          align-items: end;
+
+          &::-webkit-scrollbar {
+            display: none;
+          }
+        }
       }
     }
   

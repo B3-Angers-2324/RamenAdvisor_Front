@@ -48,8 +48,7 @@
 <style lang="scss">
     filterBar {
         position: relative;
-        height: 75px;
-        width: fit-content;
+        height: 3.5em;
         display: flex;
         flex-direction: row;
         overflow-x: scroll;
@@ -58,7 +57,7 @@
         -ms-overflow-style: none;
         pointer-events: auto;
         z-index: 2;
-        padding: 0 var(--spacing);
+        padding: 0 calc(var(--spacing) / 2);
 
         &::-webkit-scrollbar {
             display: none;
@@ -71,7 +70,6 @@
 
         .filterItem {
             height: 100%;
-            width: fit-content;
             background-color: var(--bone);
             flex-shrink: 0;
             overflow: hidden;
@@ -85,7 +83,7 @@
             cursor: pointer;
 
             p{
-                font-size: 2em;
+                font-size: 1em;
             }
 
             select {
@@ -95,7 +93,7 @@
                 background: transparent;
                 color: var(--brunswick-green);
                 font-family: var(--font-family);
-                font-size: 2em;
+                font-size: 1em;
                 cursor: pointer;
 
                 &:focus {

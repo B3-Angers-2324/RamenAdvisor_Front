@@ -26,7 +26,7 @@
             <span class="material-symbols-rounded">
                 search
             </span>
-            <input type="text" placeholder="Search ..." bind:this={input} on:click={() => showFilterBar = true} />
+            <input type="text" placeholder="Search" bind:this={input} on:click={() => showFilterBar = true} />
         </div>
         {#if showFilterBar}
             <FilterBar bind:div={filterBar}/>
@@ -52,10 +52,10 @@
             #searchBar {
                 pointer-events: auto;
                 position: relative;
-                margin: var(--spacing);
+                margin: calc(var(--spacing) / 2);
                 background-color: var(--brunswick-green);
-                height: 125px;
-                width: calc(100% - var(--spacing) * 3);
+                height: 3.5em;
+                width: calc(100% - var(--spacing) * 2);
                 border-radius: var(--radius);
                 margin-bottom: 20px;
                 display: flex;
@@ -65,7 +65,7 @@
                 z-index: 3;
 
                 .material-symbols-rounded{
-                    font-size: 75px;
+                    font-size: 2em;
                     color: var(--bone);
                 }
 
@@ -76,7 +76,7 @@
                     border: none;
                     background: transparent;
                     color: var(--bone);
-                    font-size: 20px;
+                    font-size: 1em;
                     font-family: var(--font-family);
 
                     &:focus{
