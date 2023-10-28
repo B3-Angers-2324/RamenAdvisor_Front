@@ -2,9 +2,9 @@
 // @ts-nocheck
     import { Link } from "svelte-routing";
 
-    import logo from '../assets/icon.png';
-    import UserInformation from '../lib/userInformation.svelte';
-    import CustomInput from '../lib/customInput.svelte';
+    import logo from '../../assets/icon.png';
+    import UserInformation from '../../lib/userInformation.svelte';
+    import CustomInput from '../../lib/customInput.svelte';
 
     let signIn = true;
     let signUp = false;

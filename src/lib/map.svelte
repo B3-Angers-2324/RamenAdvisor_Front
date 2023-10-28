@@ -2,15 +2,23 @@
     import { onMount } from 'svelte';
     import L from 'leaflet';
     export let dragging = false;
+    export let pin = "";
+    export let zoom ="13";
+    export let position = [47.4713730268945, -0.5523281365745003];
+    export let showPlace;
 
     let map;
     let isMouseDown = false;
     let startDragPoint = null;
-    const coord = [47.4713730268945, -0.5523281365745003];
     const dragDistance = 100;
 
     onMount(() => {
-        map = L.map('map', { zoomControl: false }).setView(coord, 13);
+        if(pin != ""){
+            map = L.map('map', { zoomControl: false }).setView(JSON.parse(pin), zoom);
+            L.marker(JSON.parse(pin)).addTo(map);
+        } else {
+            map = L.map('map', { zoomControl: false }).setView(position, zoom);
+        }
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
         map.on('mousedown', (e) => {
@@ -31,6 +39,17 @@
             }
         }
         });
+
+        if(showPlace){
+            const maxDistance = 0.001;
+            let location = JSON.parse(pin);
+            map.setMaxBounds(
+                L.latLngBounds(
+                    L.latLng(location[0]-maxDistance, location[1]-maxDistance),
+                    L.latLng(location[0]+maxDistance, location[1]+maxDistance)
+                )
+            );
+        }
     });
 </script>
 

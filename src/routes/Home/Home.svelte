@@ -31,11 +31,13 @@
       <bottomContainer class="{dragging ? 'onDragBottomContainer' : ''}">
         <div id="restaurantContainer">
           {#each restaurants as restaurant}
-              <RestaurantCard image="{restaurant.image}" type="{restaurant.foodtype}" name="{restaurant.name}" note="{restaurant.note}"/>
+            <RestaurantCard name="{restaurant.name}" address="{restaurant.address}" note="{restaurant.note}" position="{restaurant.position}" image="{restaurant.image}" foodtype="{restaurant.foodtype}" id="{restaurant.id}"/>
           {/each}
-            <!-- <RestaurantCard image="https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_1280.jpg" type="lunch_dining" name="Bobo Burger's" note="3.9"/>
-            <RestaurantCard image="https://cdn.pixabay.com/photo/2016/11/18/19/13/buildings-1836478_1280.jpg" type="fastfood" name="Oye Papi que bueno" note="4.2"/>
-            <RestaurantCard image="https://cdn.pixabay.com/photo/2020/08/27/07/31/restaurant-5521372_1280.jpg" type="restaurant" name="À la bonne franquette de jackie" note="4.1"/> -->
+            <RestaurantCard name="McDonald's Champs-Élysées" address="15 rue du tertre" note="38" position="[48.87287753220859, 2.299091242896418]" image="https://images.pexels.com/photos/5531434/pexels-photo-5531434.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" foodtype="local_pizza" id="1"/>
+            <RestaurantCard name="Burger King Montmartre" address="165 avenue des Bizneuil" note="31" position="[48.884597, 2.339918]" image="https://images.pexels.com/photos/2291599/pexels-photo-2291599.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" foodtype="restaurant" id="2"/>
+            <RestaurantCard name="KFC Montmartre" address="1 avenue du Monmartre" note="39" position="[48.890217, 2.346131]" image="https://images.pexels.com/photos/3556225/pexels-photo-3556225.jpeg?auto=compress&cs=tinysrgb&w=600" foodtype="restaurant" id="3"/>
+            <RestaurantCard name="Kebab Express" address="35 avenue du kebab" note="46" position="[48.875621, 2.337450]" image="https://images.pexels.com/photos/2983022/pexels-photo-2983022.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" foodtype="local_pizza" id="4"/>
+            <RestaurantCard name="Pizza Express" address="15 rue de la pizza" note="40" position="[48.871916, 2.329340]" image="https://images.pexels.com/photos/1841184/pexels-photo-1841184.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" foodtype="lunch_dining" id="5"/>
         </div>
         <NavBar/>
     </bottomContainer>

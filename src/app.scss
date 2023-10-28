@@ -19,16 +19,21 @@ body
   top: 0;
   left: 0;
   width: 100%;
-  background-color: var(--zomp);
+  background-color: var(--cambridge-blue);
   font-family: 'Poppins', sans-serif;
 }
 
-h1{
+h1,h2,h3,h4,h5,h6{
   margin: 0;
 }
 
 p{
   margin: 0;
+}
+
+a{
+  text-decoration: none;
+  color: var(--black);
 }
 
 // html, body{

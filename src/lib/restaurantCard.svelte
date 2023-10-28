@@ -1,19 +1,35 @@
 <script>
-    export let image;
-    export let type;
+    import { navigate } from "svelte-routing";
+    import { restaurantStore } from '../routes/Restaurant/store'; // importez votre store
+
     export let name;
+    export let address;
     export let note;
+    export let position;
+    export let image;
+    export let foodtype;
+    export let id;
+
+    function handleClick() {
+        restaurantStore.set({ name, address, note, position, image, foodtype, id }); // mettez à jour le store
+        navigate("/restaurant");
+    }
+
+    function handleKeyDown(event) {
+        if (event.key === "Enter") {
+            handleClick();
+        }
+    }
 </script>
 
-<restaurantCard>
+<restaurantCard on:click={handleClick} on:keydown={handleKeyDown} role="button" tabindex="">
     <div class="info">
         <span class="material-symbols-rounded type">
-            {type}
+            {foodtype}
         </span>
-        <p class="note">{note}/5</p>
+        <p class="note">{note/10}/5</p>
     </div>
-    <!-- svelte-ignore a11y-img-redundant-alt -->
-    <img src={image} alt="restaurant image"/>
+    <img src={image} alt="restaurant"/>
     <div class="name">
         <h1>{name}</h1>
     </div>
