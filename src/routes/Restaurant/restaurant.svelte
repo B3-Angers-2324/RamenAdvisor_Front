@@ -13,11 +13,23 @@
     function toggleDropdown(index) {
         items[index].showDropdown = !items[index].showDropdown;
     }
+
+    let imagesList = [
+        restaurantData.image,
+        "https://images.pexels.com/photos/8856554/pexels-photo-8856554.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+        "https://images.pexels.com/photos/2067560/pexels-photo-2067560.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+        "https://images.pexels.com/photos/3252051/pexels-photo-3252051.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+    ];
+    let currentImageIndex = 0;
+
+    const updateImage = (index) => {
+        currentImageIndex = index;
+    }
 </script>
 
 <main>
     <div id="restauImg">
-        <img src="{restaurantData.image}" alt="restaurant"/>
+        <img src="{imagesList[currentImageIndex]}" alt="restaurant"/>
         <div class="icon">
             <Link to="/">
                 <span class="material-symbols-rounded">arrow_back</span>
@@ -25,15 +37,13 @@
             <span class="material-symbols-rounded">favorite</span>
         </div>
         <div class="caroussel">
-            <div class="img-container">
-                <img src="https://images.pexels.com/photos/8856554/pexels-photo-8856554.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="restaurant"/>
-            </div>
-            <div class="img-container">
-                <img src="https://images.pexels.com/photos/2067560/pexels-photo-2067560.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="restaurant"/>
-            </div>
-            <div class="img-container">
-                <img src="https://images.pexels.com/photos/3252051/pexels-photo-3252051.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="restaurant"/>
-            </div>
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            {#each imagesList as image, index}
+                <!-- svelte-ignore a11y-no-static-element-interactions -->
+                <div class="img-container" on:click={() => updateImage(index)}>
+                    <img src="{image}" alt="restaurant"/>
+                </div>
+            {/each}
         </div>        
     </div>
     <div id="restauInfo">
@@ -175,7 +185,7 @@
                 bottom: 0;
                 width: calc(100% - 4 * 10px);
                 margin: 10px;
-                height: 25%;
+                height: 20%;
                 align-items: center;
                 padding: 10px;
 
