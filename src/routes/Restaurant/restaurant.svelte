@@ -25,6 +25,14 @@
     const updateImage = (index) => {
         currentImageIndex = index;
     }
+
+    let note = {
+        5: 69,
+        4: 19,
+        3: 6,
+        2: 2,
+        1: 4
+    }
 </script>
 
 <main>
@@ -72,29 +80,32 @@
     <div id="avisContainer">
         <h2>Avis</h2>
         <div class="avisFilter">
-            <div class="stars">
-                <span class="material-symbols-rounded">
-                    star
-                </span>
-                <span class="material-symbols-rounded">
-                    star
-                </span>
-                <span class="material-symbols-rounded">
-                    star
-                </span>
-                <span class="material-symbols-rounded">
-                    star
-                </span>
-                <span class="material-symbols-rounded">
-                    star
-                </span>
-            </div>
             <div class="btnFilter">
-                <button>5</button>
-                <button>4</button>
-                <button>3</button>
-                <button>2</button>
-                <button>1</button>
+                <div class="line">
+                    <button>5</button>
+                    <span style="width: {note[5]}%;"></span>
+                    <p>{note[5]}%</p>
+                </div>
+                <div class="line">
+                    <button>4</button>
+                    <span style="width: {note[4]}%;"></span>
+                    <p>{note[4]}%</p>
+                </div>
+                <div class="line">
+                    <button>3</button>
+                    <span style="width: {note[3]}%;"></span>
+                    <p>{note[3]}%</p>
+                </div>
+                <div class="line">
+                    <button>2</button>
+                    <span style="width: {note[2]}%;"></span>
+                    <p>{note[2]}%</p>
+                </div>
+                <div class="line">
+                    <button>1</button>
+                    <span style="width: {note[1]}%;"></span>
+                    <p>{note[1]}%</p>
+                </div>
             </div>
         </div>
         <div class="avisAll">
@@ -279,38 +290,13 @@
             .avisFilter{
                 margin-top: calc(var(--spacing) / 2);
                 width: 100%;
-                height: 8em;
+                height: fit-content;
                 background-color: var(--bone);
                 display: flex;
                 justify-content: space-between;
                 flex-direction: column;
                 border-radius: var(--radius);
                 overflow: hidden;
-
-                .stars{
-                    width: 100%;
-                    height: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    position: relative;
-
-                    &::before {
-                        content: "";
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 50%;
-                        height: 100%;
-                        background-color: green;
-                        z-index: -1;
-                    }
-
-                    span{
-                        font-size: 3em;
-                        position: relative;
-                    }
-                }
 
                 .btnFilter{
                     width: calc(100% - 2em);
@@ -320,19 +306,39 @@
                     align-items: center;
                     gap: 1em;
                     padding: 1em;
+                    flex-direction: column;
 
-                    button{
-                        height: 2em;
+                    .line{
                         width: 100%;
-                        border-radius: var(--radius);
-                        background-color: var(--brunswick-green);
-                        color: var(--bone);
-                        font-size: 1em;
-                        border: none;
-                        outline: none;
-                        cursor: pointer;
+                        display: grid; 
+                        grid-template-columns: 3em 1fr auto; // Le bouton aura une largeur de 3em, le span prendra tout l'espace restant, et le paragraphe aura la largeur de son contenu
+                        align-items: center;
+                        gap: 1em;                
+
+                        button{
+                            height: 2em;
+                            border-radius: var(--radius);
+                            background-color: var(--brunswick-green);
+                            color: var(--bone);
+                            font-size: 1em;
+                            border: none;
+                            outline: none;
+                            cursor: pointer;
+                        }
+
+                        span{
+                            display: block;
+                            height: 2em;
+                            background-color: var(--cambridge-blue);
+                            border-radius: var(--radius);
+                        }
+
+                        p {
+                            text-align: right; // aligner le texte à droite
+                        }
                     }
                 }
+
             }
 
             .avisAll{
