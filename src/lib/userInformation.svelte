@@ -81,6 +81,7 @@
         <CustomSelect required text="Sexe" bind:value={sexe}>
             <option value="Homme">Homme</option>
             <option value="Femme">Femme</option>
+            <option value="Autre">Autre</option>
         </CustomSelect>
         <div class="inline">
             <CustomInput type="date" required text="Date" showValid bind:value={date}/>
