@@ -35,9 +35,9 @@
       <bottomContainer class="{dragging ? 'onDragBottomContainer' : ''}">
         <div id="restaurantContainer">
           {#each restaurants as restaurant}
-            <RestaurantCard name="{restaurant.name}" note="{restaurant.note}" images="{restaurant.images}" foodtype="{restaurant.foodtype}" id="{restaurant.id}"/>
-          {/each}
-            <!--RestaurantCard name="McDonald's Champs-Élysées" address="15 rue du tertre" note="38" position="[48.87287753220859, 2.299091242896418]" image="https://images.pexels.com/photos/5531434/pexels-photo-5531434.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" foodtype="local_pizza" id="1"/>
+            <RestaurantCard name={restaurant.name} note={restaurant.note} images={restaurant.images} foodtype={restaurant.foodtype} id={restaurant.id}/>
+            {/each}
+            <!--<RestaurantCard name="McDonald's Champs-Élysées" address="15 rue du tertre" note="38" position="[48.87287753220859, 2.299091242896418]" image="https://images.pexels.com/photos/5531434/pexels-photo-5531434.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" foodtype="local_pizza" id="1"/>
             <RestaurantCard name="Burger King Montmartre" address="165 avenue des Bizneuil" note="31" position="[48.884597, 2.339918]" image="https://images.pexels.com/photos/2291599/pexels-photo-2291599.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" foodtype="restaurant" id="2"/>
             <RestaurantCard name="KFC Montmartre" address="1 avenue du Monmartre" note="39" position="[48.890217, 2.346131]" image="https://images.pexels.com/photos/3556225/pexels-photo-3556225.jpeg?auto=compress&cs=tinysrgb&w=600" foodtype="restaurant" id="3"/>
             <RestaurantCard name="Kebab Express" address="35 avenue du kebab" note="46" position="[48.875621, 2.337450]" image="https://images.pexels.com/photos/2983022/pexels-photo-2983022.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" foodtype="local_pizza" id="4"/>
