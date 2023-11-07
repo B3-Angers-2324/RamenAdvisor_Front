@@ -17,6 +17,7 @@
     "vite": "^4.4.5"
   },
   "dependencies": {
+    "crypto-js": "^4.2.0",
     "leaflet": "^1.9.4"
   }
 }
