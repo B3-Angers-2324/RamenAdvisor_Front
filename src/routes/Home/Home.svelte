@@ -29,7 +29,7 @@
   
   
   <main>
-    <Map bind:dragging/>
+    <Map bind:dragging positions={[[47.474470660753276, -0.5519484219075217]]}/>
     <div id="container">
       <SearchContainer classComponent="{dragging ? 'onDragSearchContainer' : ''}"/>
       <bottomContainer class="{dragging ? 'onDragBottomContainer' : ''}">

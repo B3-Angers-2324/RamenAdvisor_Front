@@ -8,6 +8,9 @@
     let restaurantData = {
         images:[]
     };
+
+    //Init the message Array
+    let messageData = [];
     
     onMount( () => {
         //get id from url
@@ -25,12 +28,26 @@
             restaurantData = data.obj;
             console.log(restaurantData);
         });
+        //Message API
+        fetch(`${API_URL}/message/restaurant/${id}?limit=${5}&offset=${0}`,{
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            messageData = data.obj;
+            messageData.forEach(element => {
+                element.showDropdown = false;
+            });
+        });
     })
 
     //Fill dropdown button
-    let items = Array(5).fill().map(() => ({ showDropdown: false }));
+    //let items = Array(5).fill().map(() => ({ showDropdown: false }));
     function toggleDropdown(/** @type {number} */ index) {
-        items[index].showDropdown = !items[index].showDropdown;
+        messageData[index].showDropdown = !messageData[index].showDropdown;
     }
 
     let currentImageIndex = 0;
@@ -50,7 +67,7 @@
 
 <main>
     <div id="restauImg">
-        <img src="{restaurantData.images[currentImageIndex]}" alt="restaurant"/>
+        <img src="{restaurantData.images[currentImageIndex]}" alt=""/>
         <div class="icon">
             <Link to="/">
                 <span class="material-symbols-rounded">arrow_back</span>
@@ -62,7 +79,7 @@
             {#each restaurantData.images as image, index}
                 <!-- svelte-ignore a11y-no-static-element-interactions -->
                 <div class="img-container" on:click={() => updateImage(index)}>
-                    <img src="{image}" alt="restaurant"/>
+                    <img src="{image}" alt=""/>
                 </div>
             {/each}
         </div>        
@@ -88,7 +105,7 @@
         </div>
         <div class="map">
             <Map 
-            positions={[restaurantData.position]} 
+            positions={(restaurantData.position)?[restaurantData.position]:undefined} 
             zoom="15" 
             showPin={true}
           />
@@ -126,22 +143,22 @@
             </div>
         </div>
         <div class="avisAll">
-            {#each items as item, i}
+            {#each messageData as msg, i}
                 <div class="avis">
                     <img src="http://thispersondoesnotexist.com/" alt="profil"/>
                     <div class="top">
-                    <h4>Jhon Doe</h4>
-                    <p>{Math.floor(Math.random() * 6)}/5</p>
+                    <h4>{msg.user.firstName} {msg.user.lastName}</h4>
+                    <p>{msg.note}/5</p>
                     </div>
                     <p class="comment">
-                    Ipsum elit sunt excepteur id irure aute laborum in. Deserunt ipsum labore amet sit pariatur laborum cupidatat proident duis amet ex. Laborum cupidatat quis nisi sunt voluptate incididunt nulla pariatur sit aliqua magna eu dolor.
+                    {msg.content}
                     </p>
                     <!-- svelte-ignore a11y-no-static-element-interactions -->
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <span class="material-symbols-rounded" on:click={() => toggleDropdown(i)}>
                     more_horiz
                     </span>
-                    {#if item.showDropdown}
+                    {#if msg.showDropdown}
                     <div class="dropdown">
                         <button>
                         <span class="material-symbols-rounded">
@@ -183,6 +200,7 @@
                 position: absolute;
                 object-fit: cover;
                 object-position: center;
+                background-color: #fff;
             }
 
             .icon{
