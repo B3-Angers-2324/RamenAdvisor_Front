@@ -11,17 +11,10 @@
     let isMouseDown = false;
     let startDragPoint = null;
     const dragDistance = 100;
+    var mapReady = false;
 
     onMount(() => {
-        if(pin != ""){
-            map = L.map('map', { zoomControl: false })
-            .setView(JSON.parse(pin), zoom);
-            L.marker(JSON.parse(pin)).addTo(map);
-        } else {
-            map = L.map('map', { zoomControl: false })
-            .setView(position, zoom);
-        }
-
+        map = L.map('map', { zoomControl: false }).setView(position, zoom);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
         map.on('mousedown', (e) => {
             isMouseDown = true;
@@ -41,18 +34,26 @@
             }
         }
         });
-
-        if(showPlace && pin != ""){
-            const maxDistance = 0.001;
-            let location = JSON.parse(pin);
-            map.setMaxBounds(
-                L.latLngBounds(
-                    L.latLng(location[0]-maxDistance, location[1]-maxDistance),
-                    L.latLng(location[0]+maxDistance, location[1]+maxDistance)
-                )
-            );
-        }
+        mapReady = true;
     });
+
+    $: {
+        if(mapReady){
+            if(showPlace && pin != ""){
+                const maxDistance = 0.001;
+                console.log("Here");
+                console.log(pin);
+                let location = JSON.parse(pin);
+                map.setMaxBounds(
+                    L.latLngBounds(
+                        L.latLng(location[0]-maxDistance, location[1]-maxDistance),
+                        L.latLng(location[0]+maxDistance, location[1]+maxDistance)
+                    )
+                );
+                L.marker(JSON.parse(pin)).addTo(map);
+            }
+        }
+    }
 </script>
 
 <map>

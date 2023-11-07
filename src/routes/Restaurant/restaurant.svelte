@@ -87,7 +87,7 @@
             </a>
         </div>
         <div class="map">
-            <Map pin={restaurantData.position} zoom="15" showPlace/>
+            <Map pin={JSON.stringify(restaurantData.position)} zoom="15" showPlace/>
         </div>
     </div>
     <div id="avisContainer">
