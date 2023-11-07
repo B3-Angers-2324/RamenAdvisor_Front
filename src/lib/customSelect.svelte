@@ -1,5 +1,4 @@
 <script>
-    export let type;
     export let required = false;
     export let text;
     export let showValid = false;
@@ -12,7 +11,10 @@
 </script>
 
 <customInput class="inputBox">
-    <input type={type} {required} placeholder=" " value={value} on:input={handleChange}/>
+    <select {required} value={value} on:change={handleChange}>
+        <option value="">Sélectionnez une option</option>
+        <slot />
+    </select>
     <span class:showValid={showValid == true}>{text}</span>
 </customInput>
 
@@ -23,9 +25,8 @@
         display: flex;
         flex-direction: row;
 
-        input{
+        select{
             width: 100%;
-            height: 1.5em;
             padding: 10px;
             border: none;
             background: var(--cambridge-blue);
@@ -36,16 +37,8 @@
             font-family: var(--font-family);
             z-index: 1;
 
-            // &:valid ~ span,
-            &:focus ~ span,
-            &:not(:placeholder-shown) ~ span
+            span
             {
-                transform: translateY(-75%) translateY(.5em);
-                background-color: var(--cambridge-blue);
-                border-radius: var(--radius) var(--radius) 0 0;
-                font-size: 0.75em;
-                padding-bottom: 1.5em;
-                z-index: 0;
             }
         }
 
@@ -55,12 +48,16 @@
             left: 0;
             padding: 10px;
             color: var(--black);
-            font-size: 1em;
+            font-size: 0.75em;
             font-family: var(--font-family);
             text-transform: uppercase;
             transition: .25s;
             pointer-events: none;
-            z-index: 2;
+            z-index: 0;
+            padding-bottom: 1.5em;
+            border-radius: var(--radius) var(--radius) 0 0;
+            background-color: var(--cambridge-blue);
+            transform: translateY(-75%) translateY(.5em);
         }
 
         .showValid{

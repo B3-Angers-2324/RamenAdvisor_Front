@@ -5,13 +5,51 @@
     import logo from '../../assets/icon.png';
     import UserInformation from '../../lib/userInformation.svelte';
     import CustomInput from '../../lib/customInput.svelte';
+    import { API_URL } from "../../main";
+    import SHA256 from 'crypto-js/sha256';
 
     let signIn = true;
     let signUp = false;
 
+    let error = "";
+    let email = "";
+    let password = "";
+
     let toggle = () => {
         signIn = !signIn;
         signUp = !signUp;
+    }
+
+    const handleLoginSubmit = (e) => {
+        e.preventDefault();
+        const apiRequest = API_URL + new URL(e.target.action).pathname;
+
+        let passwordHash = SHA256(password).toString();
+
+        console.log(passwordHash)
+        
+        const data = {
+            email: email,
+            password: passwordHash
+        }
+
+        fetch(apiRequest, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.token) {
+                    error = "";
+                    localStorage.setItem("token", data.token);
+                    window.location.href = "/";
+                } else {
+                    error = data.message;
+                }
+            })
     }
 
 </script>
@@ -32,9 +70,10 @@
                 <UserInformation />
             {:else}
                 <h1>Se connecter</h1>
-                <form>
-                    <CustomInput type="mail" required text="Email" />
-                    <CustomInput type="password" required text="Mot de passe" />
+                <form action="/user/login" on:submit|preventDefault={handleLoginSubmit}>
+                    <CustomInput type="email" required text="Email" bind:value={email}/>
+                    <CustomInput type="password" required text="Mot de passe" bind:value={password}/>
+                    <p class="error">{error}</p>
                     <button type="submit">Valider</button>
                 </form>
             {/if}
@@ -55,6 +94,9 @@
 </main>
 
 <style lang="scss">
+    .error{
+        color: var(--error);
+    }
     main{
         width: 100%;
         height: 100vh;
