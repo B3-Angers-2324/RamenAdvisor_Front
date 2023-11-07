@@ -14,9 +14,7 @@
       <Route path="/"><Home /></Route>
       <!--Route path="profile/:name" component="{Profile}" / -- Example using variable inside the path -->
       <Route path="register/"><Register /></Route>
-      <Route path="restaurant/">
-        <Restaurant/>
-      </Route>
+      <Route path="restaurant/:id" component={Restaurant} /><!--Restaurant/></Route-->
     </div>
   </Router> 
 </main>

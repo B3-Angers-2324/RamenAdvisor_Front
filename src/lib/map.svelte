@@ -14,10 +14,12 @@
 
     onMount(() => {
         if(pin != ""){
-            map = L.map('map', { zoomControl: false }).setView(JSON.parse(pin), zoom);
+            map = L.map('map', { zoomControl: false })
+            .setView(JSON.parse(pin), zoom);
             L.marker(JSON.parse(pin)).addTo(map);
         } else {
-            map = L.map('map', { zoomControl: false }).setView(position, zoom);
+            map = L.map('map', { zoomControl: false })
+            .setView(position, zoom);
         }
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
@@ -40,7 +42,7 @@
         }
         });
 
-        if(showPlace){
+        if(showPlace && pin != ""){
             const maxDistance = 0.001;
             let location = JSON.parse(pin);
             map.setMaxBounds(

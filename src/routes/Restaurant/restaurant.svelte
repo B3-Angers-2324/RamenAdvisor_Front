@@ -1,30 +1,43 @@
 <script>
-    import { restaurantStore } from './store.js';
     import { Link } from "svelte-routing";
     import Map from '../../lib/map.svelte';
+    import { API_URL } from '../../main.js';
+    import { onMount } from "svelte";
 
-    let restaurantData = {};
+    //Fill image with iterable array for svelte
+    let restaurantData = {
+        images:[]
+    };
+    
+    onMount( () => {
+        //get id from url
+        let url = window.location.href;
+        let id = url.substring(url.lastIndexOf('/') + 1);
+        //Restaurants API
+        fetch(`${API_URL}/restaurant/id/${id}`,{
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            restaurantData = data.obj;
+            console.log(restaurantData);
+        });
+    })
 
-    restaurantStore.subscribe(value => {
-        restaurantData = value;
-    });
-
+    //Fill dropdown button
     let items = Array(5).fill().map(() => ({ showDropdown: false }));
-    function toggleDropdown(index) {
+    function toggleDropdown(/** @type {number} */ index) {
         items[index].showDropdown = !items[index].showDropdown;
     }
 
-    let imagesList = [
-        restaurantData.image,
-        "https://images.pexels.com/photos/8856554/pexels-photo-8856554.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-        "https://images.pexels.com/photos/2067560/pexels-photo-2067560.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-        "https://images.pexels.com/photos/3252051/pexels-photo-3252051.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-    ];
     let currentImageIndex = 0;
-
-    const updateImage = (index) => {
+    const updateImage = (/** @type {number} */ index) => {
         currentImageIndex = index;
     }
+    
 
     let note = {
         5: 69,
@@ -37,7 +50,7 @@
 
 <main>
     <div id="restauImg">
-        <img src="{imagesList[currentImageIndex]}" alt="restaurant"/>
+        <img src="{restaurantData.images[currentImageIndex]}" alt="restaurant"/>
         <div class="icon">
             <Link to="/">
                 <span class="material-symbols-rounded">arrow_back</span>
@@ -46,7 +59,7 @@
         </div>
         <div class="caroussel">
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            {#each imagesList as image, index}
+            {#each restaurantData.images as image, index}
                 <!-- svelte-ignore a11y-no-static-element-interactions -->
                 <div class="img-container" on:click={() => updateImage(index)}>
                     <img src="{image}" alt="restaurant"/>
@@ -395,6 +408,7 @@
                         color: var(--black);
                         font-size: 2em;
                         user-select: none;
+                        cursor: pointer;
                     }
 
                     .dropdown{

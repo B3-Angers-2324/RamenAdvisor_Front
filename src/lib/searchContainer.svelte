@@ -7,6 +7,7 @@
     export let classComponent ='';
 
     const handleClickOutside = (event) => {
+        if (filterBar === undefined) return;
         if (event.target.tagName !== 'P' && !filterBar.contains(event.target) && event.target !== input) {
             showFilterBar = false;
         }

@@ -1,20 +1,16 @@
 <script>
     import { navigate } from "svelte-routing";
-    import { restaurantStore } from '../routes/Restaurant/store'; // importez votre store
 
     export let name;
-    export let address;
     export let note;
-    export let position;
-    export let image;
+    export let images;
     export let foodtype;
     export let id;
 
     function handleClick() {
-        restaurantStore.set({ name, address, note, position, image, foodtype, id }); // mettez à jour le store
-        navigate("/restaurant");
+        navigate("/restaurant/"+id); // naviguez vers la page "/restaurant/:id"
     }
-
+    
     function handleKeyDown(event) {
         if (event.key === "Enter") {
             handleClick();
@@ -29,7 +25,7 @@
         </span>
         <p class="note">{note/10}/5</p>
     </div>
-    <img src={image} alt="restaurant"/>
+    <img src={images[0]} alt="restaurant"/>
     <div class="name">
         <h1>{name}</h1>
     </div>
