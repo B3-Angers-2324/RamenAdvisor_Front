@@ -2,11 +2,11 @@
     import { onMount } from 'svelte';
 
     import 'leaflet/dist/leaflet.css';
-    import SearchContainer from '../../lib/searchContainer.svelte';
-    import NavBar from "../../lib/navBar.svelte";
-    import { API_URL } from "../../main";
-    import RestaurantCard from "../../lib/restaurantCard.svelte";
-    import Map from "../../lib/map.svelte";
+    import SearchContainer from '../lib/searchContainer.svelte';
+    import NavBar from "../lib/navBar.svelte";
+    import { API_URL } from "../main";
+    import RestaurantCard from "../lib/restaurantCard.svelte";
+    import Map from "../lib/map.svelte";
     let dragging = false;
 
     //Get the restaurants from the API

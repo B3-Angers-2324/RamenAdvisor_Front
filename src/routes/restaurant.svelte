@@ -1,8 +1,10 @@
 <script>
     import { Link } from "svelte-routing";
-    import Map from '../../lib/map.svelte';
-    import { API_URL } from '../../main.js';
+    import Map from '../lib/map.svelte';
+    import { API_URL } from '../main.js';
     import { onMount } from "svelte";
+
+    import { navigate } from "svelte-routing";
 
     //Fill image with iterable array for svelte
     let restaurantData = {
@@ -12,12 +14,12 @@
     //Init the message Array
     let messageData = [];
     
-    onMount( () => {
+    onMount(async () => {
         //get id from url
         let url = window.location.href;
         let id = url.substring(url.lastIndexOf('/') + 1);
         //Restaurants API
-        fetch(`${API_URL}/restaurant/id/${id}`,{
+        await fetch(`${API_URL}/restaurant/id/${id}`,{
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -26,6 +28,10 @@
         .then((res) => res.json())
         .then((data) => {
             restaurantData = data.obj;
+        })
+        .catch((err) => {
+            console.log('HERE');
+            navigate("/Error");
         });
         //Message API
         fetch(`${API_URL}/message/restaurant/${id}?limit=${5}&offset=${0}`,{
@@ -40,6 +46,9 @@
             messageData.forEach(element => {
                 element.showDropdown = false;
             });
+        }).catch((err) => {
+            console.log('HERE');
+            navigate("/Error", {replace: true});
         });
     })
 

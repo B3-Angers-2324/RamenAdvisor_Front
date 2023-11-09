@@ -2,10 +2,10 @@
 // @ts-nocheck
     import { Link } from "svelte-routing";
 
-    import logo from '../../assets/icon.png';
-    import UserInformation from '../../lib/userInformation.svelte';
-    import CustomInput from '../../lib/customInput.svelte';
-    import { API_URL } from "../../main";
+    import logo from '../assets/icon.png';
+    import UserInformation from '../lib/userInformation.svelte';
+    import CustomInput from '../lib/customInput.svelte';
+    import { API_URL } from "../main";
     import SHA256 from 'crypto-js/sha256';
 
     let signIn = true;
