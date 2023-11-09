@@ -2,6 +2,8 @@
     import { onMount } from 'svelte';
     import L from 'leaflet';
 
+    import markerImg from '../assets/markerLeaflet.png';
+
     export let dragging = false;
     export let positions = undefined;
     export let zoom = "13";
@@ -13,6 +15,13 @@
     let startDragPoint = null;
     const dragDistance = 100;
     let mapReady = false;
+
+    const customMarker = L.icon({
+        iconUrl: markerImg,
+
+        iconSize:     [52, 82], // size of the icon
+        iconAnchor:   [26, 81], // point of the icon which will correspond to marker's location
+    });
 
     onMount(() => {
         map = L.map('map', { zoomControl: false }).setView( [16.766589,-3.002561], zoom);
@@ -47,7 +56,7 @@
 
             //For each position given add a marker
             positions.forEach((position) => {
-                let marker = L.marker(position).addTo(map);
+                let marker = L.marker(position, {icon: customMarker}).addTo(map);
                 marker.setOpacity(0);
                 markers.push(marker);
             });
