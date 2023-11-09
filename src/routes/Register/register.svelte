@@ -82,7 +82,7 @@
                 <a role="button" on:click={toggle} on:keydown={toggle}>
                     {#if signUp}Déja un compte?{:else}Créer un compte{/if}
                 </a>                             
-                <a href="/pro">Vous êtes pro ?</a>
+                <a href="https://owner.ramenadvisor.fr">Vous êtes pro ?</a>
             </div>
         </div>
     </div>
