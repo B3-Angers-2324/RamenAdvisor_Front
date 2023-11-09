@@ -11,6 +11,7 @@
 
     //Get the restaurants from the API
     let restaurants = [];
+    let listPos = undefined;
     const limit = 5;
     onMount ( async () => {
       fetch(`${API_URL}/restaurant/best?limit=${limit}`,{
@@ -21,15 +22,27 @@
       })
       .then((res) => res.json())
       .then((data) => {
+        let listProv = [];
+        data.obj.forEach((restaurant,i) => {
+          listProv.push(restaurant.position);
+          //At the end of the loop, we update the list
+          if(i >= data.obj.length-1){
+            listPos = listProv;
+          }
+        });
         restaurants = data.obj;
-        console.log(restaurants);
+        
       });
     })
   </script>
   
   
   <main>
-    <Map bind:dragging positions={[[47.474470660753276, -0.5519484219075217]]}/>
+    <Map 
+      bind:dragging 
+      positions={listPos}
+      showPin={true}
+      />
     <div id="container">
       <SearchContainer classComponent="{dragging ? 'onDragSearchContainer' : ''}"/>
       <bottomContainer class="{dragging ? 'onDragBottomContainer' : ''}">

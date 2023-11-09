@@ -26,7 +26,6 @@
 
         let passwordHash = SHA256(password).toString();
 
-        console.log(passwordHash)
         
         const data = {
             email: email,

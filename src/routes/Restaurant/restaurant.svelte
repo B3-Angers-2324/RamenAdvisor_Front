@@ -26,7 +26,6 @@
         .then((res) => res.json())
         .then((data) => {
             restaurantData = data.obj;
-            console.log(restaurantData);
         });
         //Message API
         fetch(`${API_URL}/message/restaurant/${id}?limit=${5}&offset=${0}`,{

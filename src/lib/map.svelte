@@ -1,7 +1,6 @@
 <script>
     import { onMount } from 'svelte';
     import L from 'leaflet';
-    import { LatLng } from 'leaflet';
 
     export let dragging = false;
     export let positions = undefined;
@@ -41,26 +40,22 @@
     });
 
     $: {
-        console.log("positions :" ,positions);
-        if(mapReady && positions != undefined){
-            console.log("showPin");
+        if(mapReady && positions != undefined && positions.length > 0){
             // reset marker list
             markers.forEach(marker => map.removeLayer(marker));
             markers = [];
 
             //For each position given add a marker
-            positions.forEach(position => {
+            positions.forEach((position) => {
                 let marker = L.marker(position).addTo(map);
                 marker.setOpacity(0);
                 markers.push(marker);
             });
-
             // fit the map to the bounds of the markers
             let group = L.featureGroup(markers);
             //get the center of the group
             //map.setView(group.getBounds().getCenter());
             map.fitBounds(group.getBounds());
-            console.log("markers :",markers, "\n group :",group , "\n group.getBounds() :",group.getBounds(),"\n group.getBounds().getCenter() :",group.getBounds().getCenter());
 
             if (showPin) {
                 markers.forEach(marker => marker.setOpacity(1));
