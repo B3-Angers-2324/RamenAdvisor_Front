@@ -6,6 +6,12 @@
     let showFilterBar = false;
     export let classComponent ='';
 
+    //Event for the search bar
+    export let onKeypress = (e) => {};
+    //Event for the filter bar
+    export let onFilterChange = (e) => {};
+    export let filterState= {};
+
     const handleClickOutside = (event) => {
         if (filterBar === undefined) return;
         if (event.target.tagName !== 'P' && !filterBar.contains(event.target) && event.target !== input) {
@@ -13,12 +19,15 @@
         }
     };
 
+
     afterUpdate(() => {
         window.addEventListener('mousedown', handleClickOutside);
         return () => {
             window.removeEventListener('mousedown', handleClickOutside);
         };
     });
+
+
 </script>
 
 <searchContainer class="{classComponent}">
@@ -27,10 +36,10 @@
             <span class="material-symbols-rounded">
                 search
             </span>
-            <input type="text" placeholder="Search" bind:this={input} on:click={() => showFilterBar = true} />
+            <input type="text" placeholder="Search" bind:this={input} on:click={() => showFilterBar = true}  on:keydown={onKeypress}/>
         </div>
         {#if showFilterBar}
-            <FilterBar bind:div={filterBar}/>
+            <FilterBar bind:div={filterBar} filterState={filterState} onFilterChange={onFilterChange}/>
         {/if}
     </div>
 </searchContainer>

@@ -1,5 +1,10 @@
 <script>
+    import { onMount } from "svelte";
+
     export let div;
+
+    export let filterState= {};
+    export let onFilterChange = (e) => {};
 
     const customTransition = (node, { duration }) => {
         return {
@@ -13,35 +18,21 @@
 
 <filterBar transition:customTransition={{duration: 250}}>
     <div class="filterItem" bind:this={div}>
-        <select name="Type" id="type">
-            <option value="italien">Italien</option>
-            <option value="japonais">Japonais</option>
-            <option value="chinois">Chinois</option>
-            <option value="traditionel">Traditionel</option>
+        <select name="Type" id="type" on:change={onFilterChange} value="{filterState.type}">
+            <option value="none">Tout type</option>
+            <option value="local_pizza">Pizza</option>
+            <option value="lunch_dining">Dinner</option>
+            <option value="fastfood">Fast-food</option>
+            <option value="restaurant">Restaurant</option>
         </select>
     </div>
 
-    <button class="filterItem soloItem">
-        <p>À Proximité</p>
+    <button class="filterItem soloItem {(filterState.accessible)?"on":""}" on:click={onFilterChange}>
+        <p>Accessible</p>
         <span class="material-symbols-rounded">
-            location_on
+            accessible
         </span>
     </button>    
-    
-
-    <button class="filterItem soloItem">
-        <p>À Emporter</p>
-        <span class="material-symbols-rounded">
-            takeout_dining
-        </span>
-    </button>
-
-    <button class="filterItem soloItem">
-        <p>À Livrer</p>
-        <span class="material-symbols-rounded">
-            local_shipping
-        </span>
-    </button>
 </filterBar>
 
 
@@ -66,6 +57,14 @@
         button{
             border: none;
             font-family: var(--font-family);
+
+            &.filterItem{
+
+                &.on{
+                    background-color: var(--brunswick-green);
+                    color: var(--bone);
+                }
+            }
         }
 
         .filterItem {

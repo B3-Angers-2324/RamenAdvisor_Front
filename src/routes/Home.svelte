@@ -12,16 +12,34 @@
     //Get the restaurants from the API
     let restaurants = [];
     let listPos = undefined;
-    const limit = 5;
+    const limit = 20;
+    let showpin = true;
     onMount ( async () => {
-      fetch(`${API_URL}/restaurant/best?limit=${limit}`,{
+      requestDataRestaurantFromAPI(`${API_URL}/restaurant/best?limit=${limit}`);
+    })
+
+    //request the data from the API and update the list of restaurants for an url
+    async function requestDataRestaurantFromAPI(url){
+      fetch(url,{
         method: "GET",
         headers: {
             "Content-Type": "application/json",
         }
       })
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 404) {
+          throw new Error("No restaurant found");
+        }
+        return res.json();
+      })
       .then((data) => {
+        //Detect if 404
+        console.log(data);
+        if(data.status === 404){
+          console.log("No restaurant found");
+          restaurants = [];
+          return;
+        }
         let listProv = [];
         data.obj.forEach((restaurant,i) => {
           listProv.push(restaurant.position);
@@ -31,9 +49,57 @@
           }
         });
         restaurants = data.obj;
-        
+        showpin = true;
+      })
+      .catch((err) => {
+        restaurants = [];
+        showpin = false;
       });
-    })
+    }
+
+    /* === Event for the search and filter bar === */
+    console.log("Home");
+    let filterState= {
+        search: "",
+        type: "none",
+        accessible: false,
+    };
+
+    // Function to react on keypress (Is sended to the searchContainer component)
+    let onKeypressInSearch = (e) => {
+        if(e.key === "Enter"){
+            filterState.search = e.target.value;
+            fetchWithFilterAndSearch(filterState);
+        }
+    };
+
+    //Function to react on filter change (Is sended to the filterBar component)
+    let onFilterChange = (e) => {
+        //If it's a type change 
+        if(e.target.id === "type"){
+            filterState.type = e.target.value;
+        }else{ //If it's a accessible change
+            filterState.accessible = !filterState.accessible;
+        }
+        fetchWithFilterAndSearch(filterState);
+    };
+
+    async function fetchWithFilterAndSearch(filters){
+
+      //Build the url based on the filters
+      let url = `${API_URL}/restaurant/search?`;
+      if (filters.search !== "") {
+        url += `search=${filters.search}&`;
+      }
+      if (filters.type !== "") {
+        url += `type=${filters.type}&`;
+      }
+      if (filters.accessible !== "") {
+        url += `accessible=${filters.accessible}&`;
+      }
+      url+=`limit=${limit}`;
+      requestDataRestaurantFromAPI(url)
+    }
   </script>
   
   
@@ -41,10 +107,10 @@
     <Map 
       bind:dragging 
       positions={listPos}
-      showPin={true}
+      showPin={showpin}
       />
     <div id="container">
-      <SearchContainer classComponent="{dragging ? 'onDragSearchContainer' : ''}"/>
+      <SearchContainer classComponent="{dragging ? 'onDragSearchContainer' : ''}" onKeypress={onKeypressInSearch} onFilterChange={onFilterChange} filterState={filterState}/>
       <bottomContainer class="{dragging ? 'onDragBottomContainer' : ''}">
         <div id="restaurantContainer">
           {#each restaurants as restaurant}
