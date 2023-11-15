@@ -55,12 +55,32 @@
     //Fill dropdown button
     //let items = Array(5).fill().map(() => ({ showDropdown: false }));
     function toggleDropdown(/** @type {number} */ index) {
+        messageData.forEach((element,i) => {
+            if (i!=index) element.showDropdown = false;
+        });
         messageData[index].showDropdown = !messageData[index].showDropdown;
     }
 
     let currentImageIndex = 0;
     const updateImage = (/** @type {number} */ index) => {
         currentImageIndex = index;
+    }
+
+    function sendReport(index){
+        console.log(messageData[index]);
+        let restaurantId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+        alert("Merci de votre signalement");
+        fetch(`${API_URL}/message/report/${messageData[index].id}`,{
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                "userId": messageData[index].user.id,
+                "restaurantId": restaurantId,
+                "messageId": messageData[index].id
+            })
+        })
     }
     
 
@@ -163,22 +183,16 @@
                     </p>
                     <!-- svelte-ignore a11y-no-static-element-interactions -->
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <span class="material-symbols-rounded" on:click={() => toggleDropdown(i)}>
+                    <span class="material-symbols-rounded {(msg.showDropdown)?"dropped":""}" on:click={() => toggleDropdown(i)}>
                     more_horiz
                     </span>
                     {#if msg.showDropdown}
                     <div class="dropdown">
-                        <button>
+                        <button on:click={() => sendReport(i)}>
                         <span class="material-symbols-rounded">
                             flag
                         </span>
                         Signaler
-                        </button>
-                        <button>
-                        <span class="material-symbols-rounded">
-                            edit
-                        </span>
-                        Modifier
                         </button>
                     </div>
                     {/if}
@@ -439,6 +453,10 @@
                         font-size: 2em;
                         user-select: none;
                         cursor: pointer;
+
+                        &.dropped{
+                            cursor: default;
+                        }
                     }
 
                     .dropdown{
