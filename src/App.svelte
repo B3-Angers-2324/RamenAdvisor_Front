@@ -5,6 +5,7 @@
   import Register from "./routes/register.svelte";
   import Restaurant from "./routes/restaurant.svelte";
   import Error from "./routes/40X.svelte";
+  import Edit from "./routes/userProfil/profil.svelte";
   export let url = "";
 </script>
 
@@ -16,6 +17,7 @@
       <!--Route path="profile/:name" component="{Profile}" / -- Example using variable inside the path -->
       <Route path="register/"><Register /></Route>
       <Route path="restaurant/:id" component={Restaurant} /><!--Restaurant/></Route-->
+      <Route path="/edit"><Edit/></Route>
       <Route path="error/:err" component={Error} />
       <Route path="*">{navigate("/error/404")}</Route>
     </div>

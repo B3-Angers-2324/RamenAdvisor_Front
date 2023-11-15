@@ -12,7 +12,7 @@
 
 <customInput class="inputBox">
     <select {required} value={value} on:change={handleChange}>
-        <option value="">Sélectionnez une option</option>
+        <option value="" disabled>---</option>
         <slot />
     </select>
     <span class:showValid={showValid == true}>{text}</span>

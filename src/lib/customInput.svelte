@@ -13,7 +13,7 @@
 
 <customInput class="inputBox">
     <input type={type} {required} placeholder=" " value={value} on:input={handleChange}/>
-    <span class:showValid={showValid == true}>{text}</span>
+    <span class:showValid={showValid == true}  style={type==='date' ? "font-size: .5em" : ""}>{text} {required ? " *" : ""}</span>
 </customInput>
 
 <style lang="scss">
@@ -32,7 +32,7 @@
             border-radius: var(--radius);
             outline: none;
             color: var(--black);
-            font-size: 1em;
+            font-size: .75em;
             font-family: var(--font-family);
             z-index: 1;
 
@@ -55,7 +55,7 @@
             left: 0;
             padding: 10px;
             color: var(--black);
-            font-size: 1em;
+            font-size: .75em;
             font-family: var(--font-family);
             text-transform: uppercase;
             transition: .25s;
