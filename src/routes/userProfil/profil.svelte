@@ -3,11 +3,80 @@
 
     import CustomInput from '../../lib/customInput.svelte';
     import CustomSelect from "../../lib/customSelect.svelte";
+    import { API_URL } from "../../main";
+    import Modal from "../../lib/modal.svelte";
 
     let popup = false;
+    let information = {
+        firstName: "",
+        lastName: "",
+        birthDay: "",
+        email: "",
+        phone: "",
+        sexe: "",
+        ville: "",
+        address: ""
+    }
+    let error = "";
+    let showModal = false;
 
     const handlePopup = () => {
         popup = !popup;
+    }
+
+    if(localStorage.getItem("token") == null){
+        window.location.href = "/";
+    }
+
+    fetch(`${API_URL}/user/profile`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            information = data.user;
+        })
+
+    const handleUpdateProfile = () => {
+        fetch(`${API_URL}/user/profile`, {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify(information)
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                error = data.message;
+            })
+    }
+
+    const handleDeleteProfile = () => {
+        fetch(`${API_URL}/user/profile`, {
+                method: "DELETE",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            })
+            .then((res) => {
+                if (res.status === 200) {
+                    localStorage.removeItem('token');
+                    window.location.href = "/";
+                }
+                return res.json();
+            })
+            .then((data) => {
+                error = data.message;
+            })
+    }
+
+    const handleDeleteComment = () => {
+        //TODO
     }
 </script>
     
@@ -37,34 +106,35 @@
             <img src="https://thispersondoesnotexist.com/" alt="Logo app">
         </div>
         <div id="content">
-            <h2>Jhon Doe</h2>
+            <h2>{information["firstName"] + information['lastName']}</h2>
             <div id="cityContainer">
                 <span class="material-symbols-rounded">
                     location_on
                 </span>
-                Angers
+                {information["ville"]}
             </div>
             <div id="navBtnContainer">
                 <a href="#editProfil">Edit Profil</a>
                 <a href="#comments">Comments</a>
             </div>
             <div id="editProfil">
-                <CustomInput type="text" text="Nom" required/>
-                <CustomInput type="text" text="Prénom" required/>
+                <CustomInput type="text" text="Nom" bind:value={information["lastName"]} required/>
+                <CustomInput type="text" text="Prénom" bind:value={information["firstName"]} required/>
                 <div style="display: flex; gap: .5em;align-items: flex-end;">
-                    <CustomSelect text="Sexe" required>
-                        <option value="homme">Homme</option>
-                        <option value="femme">Femme</option>
-                        <option value="autre">Autre</option>
+                    <CustomSelect text="Sexe" bind:value={information["sexe"]} required>
+                        <option value="Homme">Homme</option>
+                        <option value="Femme">Femme</option>
+                        <option value="Autre">Autre</option>
                     </CustomSelect>
-                    <CustomInput type="date" text="Date de naissance" required/>
+                    <CustomInput type="date" bind:value={information["birthDay"]} text="Date de naissance" required/>
                 </div>
-                <CustomInput text="Ville" type="text" required/>
-                <CustomInput text="Email" type="email" required/>
-                <CustomInput text="Mot de passe" type="password" required/>
-                <CustomInput text="Confirmer mot de passe" type="password" required/>
+                <CustomInput text="Ville" bind:value={information["ville"]} type="text" required/>
+                <CustomInput text="Adresse" bind:value={information["address"]} type="text" required/>
+                <CustomInput text="Email" bind:value={information["email"]} type="email" required/>
+                <CustomInput text="Téléphone" bind:value={information["phone"]} type="tel" required/>
+                <p class="error">{error}</p>
                 <div id="register">
-                    <button>Enregistrer</button>
+                    <button on:click={handleUpdateProfile}>Enregistrer</button>
                 </div>
             </div>
             <div id="comments">
@@ -84,13 +154,20 @@
                 {/each}
             </div>
             <div id="delete">
-                <button>Supprimer mon compte</button>
+                <button on:click={() => showModal = true}>Supprimer mon compte</button>
             </div>
         </div>
     </div>
+    <Modal bind:showModal validate={handleDeleteProfile}>
+        <h2 slot="header">Voulez-vous vraiment supprimer votre compte ?</h2>
+    </Modal>
 </main>
     
 <style lang="scss">
+    .error{
+        color: red;
+        text-align: center;
+    }
     #popup{
         width: 100%;
         height: 100%;
@@ -113,7 +190,6 @@
 
         #popupContent{
             width: 50%;
-            height: 50%;
             background-color: var(--bone);
             border-radius: var(--radius);
             display: flex;

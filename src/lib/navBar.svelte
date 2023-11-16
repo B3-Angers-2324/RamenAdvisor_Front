@@ -1,6 +1,10 @@
 <script>
     import { Link } from "svelte-routing";
 
+    let accout_url = "register";
+    if(localStorage.getItem("token") != null){
+        accout_url = "profile";
+    }
 </script>
 
 <navBar>
@@ -17,7 +21,7 @@
         </span>
     </button>
     <button>
-        <Link to="register/">
+        <Link to={accout_url}>
             <span class="material-symbols-rounded">
                 account_circle
             </span>
