@@ -13,6 +13,7 @@ To test the restaurant page, check the following points :
 ## Test 2 : test 404 redirect 
 > [!WARNING]
 > Not emplemented yet.
+
 Check that the page displays a 404 error when the restaurant doesn't exist.
 
     1.Try to access the page /restaurant/0
