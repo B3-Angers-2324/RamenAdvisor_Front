@@ -47,7 +47,6 @@
                 element.showDropdown = false;
             });
         }).catch((err) => {
-            console.log('HERE');
             navigate("/Error", {replace: true});
         });
     })
