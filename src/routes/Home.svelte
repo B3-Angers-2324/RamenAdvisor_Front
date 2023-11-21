@@ -51,7 +51,6 @@
     }
 
     /* === Event for the search and filter bar === */
-    console.log("Home");
     let filterState= {
         search: "",
         type: "none",

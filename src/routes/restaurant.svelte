@@ -30,7 +30,6 @@
             restaurantData = data.obj;
         })
         .catch((err) => {
-            console.log('HERE');
             navigate("/Error");
         });
         //Message API
@@ -66,7 +65,6 @@
     }
 
     function sendReport(index){
-        console.log(messageData[index]);
         let restaurantId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
         alert("Merci de votre signalement");
         fetch(`${API_URL}/message/report/${messageData[index].id}`,{
