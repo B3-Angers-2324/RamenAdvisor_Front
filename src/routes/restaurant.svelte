@@ -12,7 +12,8 @@
 
     //Fill image with iterable array for svelte
     let restaurantData = {
-        images:[]
+        images:[],
+        detailNote:[]
     };
 
     const limit = 5;
@@ -21,7 +22,7 @@
     //Init the message Array
     let messageData = [];
     
-    onMount(async () => {
+    let promiseStart = onMount(async () => {
         //Restaurants API
         let response = await fetch(`${API_URL}/restaurant/id/${getId()}`,{
             method: "GET",
@@ -34,6 +35,16 @@
         }
         let data = await response.json();
         restaurantData = data.obj;
+        console.log("restaurantData :",restaurantData);
+        console.log("restaurantData.detailNote :",restaurantData.detailNote);
+
+        //get percentage of each note
+        fetch(`${API_URL}/restaurant/id/${getId()}`,{
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        }).then(response => response.json())
         
         //Message API
         updateMessage(limit,0);
@@ -41,7 +52,7 @@
 
     async function updateMessage(limit, offset){
         //Message API
-        let response = await fetch(`${API_URL}/message/restaurant/${getId()}?limit=${limit}&offset=${offset}`,{
+        let response = await fetch(`${API_URL}/message/all/restaurant/${getId()}?limit=${limit}&offset=${offset}`,{
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -94,7 +105,7 @@
     async function newComment(e){
         e.preventDefault();
         if (textArea.value == "" || selectedNote==0) return;
-        let response = await fetch(`${API_URL}/message/restaurant/${getId()}`,{
+        let response = await fetch(`${API_URL}/message/new/restaurant/${getId()}`,{
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -113,15 +124,6 @@
         }
         textArea.value = "";
         selectedNote = 0;
-    }
-    
-
-    let note = {
-        5: 69,
-        4: 19,
-        3: 6,
-        2: 2,
-        1: 4
     }
 
     let textArea;
@@ -213,31 +215,13 @@
         <h2>Avis</h2>
         <div class="avisFilter">
             <div class="btnFilter">
-                <div class="line">
-                    <button>5</button>
-                    <span style="width: {note[5]}%;"></span>
-                    <p>{note[5]}%</p>
-                </div>
-                <div class="line">
-                    <button>4</button>
-                    <span style="width: {note[4]}%;"></span>
-                    <p>{note[4]}%</p>
-                </div>
-                <div class="line">
-                    <button>3</button>
-                    <span style="width: {note[3]}%;"></span>
-                    <p>{note[3]}%</p>
-                </div>
-                <div class="line">
-                    <button>2</button>
-                    <span style="width: {note[2]}%;"></span>
-                    <p>{note[2]}%</p>
-                </div>
-                <div class="line">
-                    <button>1</button>
-                    <span style="width: {note[1]}%;"></span>
-                    <p>{note[1]}%</p>
-                </div>
+                {#each restaurantData.detailNote as element,i}
+                    <div class="line">
+                        <button>{i+1}</button>
+                        <span style="width: {element.percentage}%;"></span>
+                        <p>{element.percentage}%</p>
+                    </div>
+                {/each}
             </div>
         </div>
         <div class="avisAll">
