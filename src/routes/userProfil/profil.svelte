@@ -35,9 +35,16 @@
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             }
         })
-        .then((res) => res.json())
+        .then((res) => {
+            if (res.status === 404) {
+                localStorage.removeItem('token');
+                window.location.href = "/";
+            }
+            return res.json();
+        })
         .then((data) => {
             information = data.user;
+            information["birthDay"] = information["birthDay"].split("T")[0];
         })
 
     const handleUpdateProfile = () => {
