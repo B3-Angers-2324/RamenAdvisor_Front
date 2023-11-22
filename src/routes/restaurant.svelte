@@ -1,10 +1,14 @@
 <script>
     import { Link } from "svelte-routing";
     import Map from '../lib/map.svelte';
-    import { API_URL } from '../main.js';
+    import { API_URL, isConnected } from '../main.js';
     import { onMount } from "svelte";
 
     import { navigate } from "svelte-routing";
+
+    function getId(){
+        return  window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
+    }
 
     //Fill image with iterable array for svelte
     let restaurantData = {
@@ -15,40 +19,40 @@
     let messageData = [];
     
     onMount(async () => {
-        //get id from url
-        let url = window.location.href;
-        let id = url.substring(url.lastIndexOf('/') + 1);
         //Restaurants API
-        await fetch(`${API_URL}/restaurant/id/${id}`,{
+        let response = await fetch(`${API_URL}/restaurant/id/${getId()}`,{
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
             }
         })
-        .then((res) => res.json())
-        .then((data) => {
-            restaurantData = data.obj;
-        })
-        .catch((err) => {
-            navigate("/Error");
-        });
+        if (response.status == 404){
+            navigate("/Error/404");
+        }
+        let data = await response.json();
+        restaurantData = data.obj;
+        
         //Message API
-        fetch(`${API_URL}/message/restaurant/${id}?limit=${5}&offset=${0}`,{
+        updateMessage(5,0);
+    })
+
+    async function updateMessage(limit, offset){
+        //Message API
+        let response = await fetch(`${API_URL}/message/restaurant/${getId()}?limit=${limit}&offset=${offset}`,{
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
             }
         })
-        .then((res) => res.json())
-        .then((data) => {
-            messageData = data.obj;
-            messageData.forEach(element => {
-                element.showDropdown = false;
-            });
-        }).catch((err) => {
-            navigate("/Error", {replace: true});
+        if (response.status == 404){
+            navigate("/Error/404");
+        }
+        let data = await response.json();
+        messageData = data.obj;
+        messageData.forEach(element => {
+            element.showDropdown = false;
         });
-    })
+    }
 
     //Fill dropdown button
     //let items = Array(5).fill().map(() => ({ showDropdown: false }));
@@ -65,7 +69,6 @@
     }
 
     function sendReport(index){
-        let restaurantId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
         alert("Merci de votre signalement");
         fetch(`${API_URL}/message/report/${messageData[index].id}`,{
             method: "PUT",
@@ -74,10 +77,38 @@
             },
             body: JSON.stringify({
                 "userId": messageData[index].user.id,
-                "restaurantId": restaurantId,
+                "restaurantId": getId(),
                 "messageId": messageData[index].id
             })
         })
+    }
+
+    let selectedNote = 0;
+    function onChangeNote(event) {
+		selectedNote = event.currentTarget.value;
+	}
+    async function newComment(e){
+        e.preventDefault();
+        if (textArea.value == "" || selectedNote==0) return;
+        let response = await fetch(`${API_URL}/message/restaurant/${getId()}`,{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                "message": textArea.value,
+                "note": selectedNote
+            })
+        })
+        if (response.status == 200) {
+            await updateMessage(5,0);
+        }else{
+            let json = await response.json();
+            alert(json.message);
+        }
+        textArea.value = "";
+        selectedNote = 0;
     }
     
 
@@ -143,35 +174,37 @@
           />
         </div>
     </div>
+    {#if isConnected()}
     <div id="postCommentContainer">
         <h3>Votre Commentaire</h3>
-        <form>
+        <form on:submit|preventDefault={newComment}>
             <textarea bind:this={textArea} on:input={adjustHeight} name="comment" id="comment" placeholder="Votre commentaire..." required></textarea>  
             <div class="rating">
-                <input name="stars" id="e5" type="radio" required>
+                <input checked={selectedNote===5} on:change={onChangeNote} name="stars" id="e5" type="radio" value="5" required>
                 <label for="e5">
                     <span class="material-symbols-rounded">star</span>
                 </label>
-                <input name="stars" id="e4" type="radio" required>
+                <input checked={selectedNote===4} on:change={onChangeNote} name="stars" id="e4" type="radio" value="4" required>
                 <label for="e4">
                     <span class="material-symbols-rounded">star</span>
                 </label>
-                <input name="stars" id="e3" type="radio" required>
+                <input checked={selectedNote===3} on:change={onChangeNote} name="stars" id="e3" type="radio" value="3" required>
                 <label for="e3">
                     <span class="material-symbols-rounded">star</span>
                 </label>
-                <input name="stars" id="e2" type="radio" required>
+                <input checked={selectedNote===2} on:change={onChangeNote} name="stars" id="e2" type="radio" value="2" required>
                 <label for="e2">
                     <span class="material-symbols-rounded">star</span>
                 </label>
-                <input name="stars" id="e1" type="radio" required>
+                <input checked={selectedNote===1} on:change={onChangeNote} name="stars" id="e1" type="radio" value="1" required>
                 <label for="e1">
                     <span class="material-symbols-rounded">star</span>
                 </label>
             </div>
-            <button>Envoyer</button>
+            <button type="submit">Envoyer</button>
         </form>
-    </div>
+    </div>  
+    {/if}
     <div id="avisContainer">
         <h2>Avis</h2>
         <div class="avisFilter">
