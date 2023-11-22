@@ -140,7 +140,7 @@
           <span class="material-symbols-rounded">
               search
           </span>
-          <input type="text" placeholder="Search" bind:this={input} on:click|stopPropagation={toggleFilterBar}  on:keydown={() => {}}/>
+          <input type="text" placeholder="Search" bind:this={input} on:click|stopPropagation={toggleFilterBar}  on:keydown={onKeypressInSearch}/>
       </div>
         <div id="filterBar">
           <div class="filterItem">
