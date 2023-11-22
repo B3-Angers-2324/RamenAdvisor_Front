@@ -2,9 +2,16 @@
     import { onMount, afterUpdate } from 'svelte';
     import { Link, navigate } from "svelte-routing";
     import { API_URL } from "../../main";  
+    import icon from "../../assets/icon.png";
   
     import 'leaflet/dist/leaflet.css';
     import Map from "../../lib/map.svelte";
+
+    let accout_url = "register";
+    console.log(localStorage.getItem("token"));
+    if(localStorage.getItem("token") != null){
+        accout_url = "profile";
+    }
   
     //Get the restaurants from the API
     let restaurants = [];
@@ -114,7 +121,7 @@
     <div id="navbar">
         <Link to="/">
             <div id="img">
-                <img src="../../src/assets/icon.png" alt="">
+                <img src={icon} alt="">
                 <h2>RamenAdvisor</h2>
             </div>
         </Link>
@@ -151,7 +158,7 @@
                 </span>
             </button>
             <button>
-                <Link to="register/">
+                <Link to={accout_url}>
                     <span class="material-symbols-rounded">
                         account_circle
                     </span>
