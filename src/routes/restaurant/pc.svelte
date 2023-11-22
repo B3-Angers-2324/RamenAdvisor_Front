@@ -1,7 +1,7 @@
 <script>
     import { Link } from "svelte-routing";
-    import Map from '../lib/map.svelte';
-    import { API_URL } from '../main.js';
+    import Map from '../../lib/map.svelte';
+    import { API_URL } from '../../main.js';
     import { onMount } from "svelte";
 
     import { navigate } from "svelte-routing";
@@ -204,9 +204,9 @@
   
 <style lang="scss">
     main{
-        width: calc(100% - 2 * var(--spacing));
+        width: 50%;
         height: 100%;
-        padding: var(--spacing);
+        padding: var(--spacing) 25%;
 
         #restauImg{
             width: 100%;
