@@ -1,73 +1,56 @@
 <script>
     import { Link } from "svelte-routing";
-    import Map from '../lib/map.svelte';
-    import { API_URL, isConnected } from '../main.js';
+    import Map from '../../lib/map.svelte';
+    import { API_URL } from '../../main.js';
     import { onMount } from "svelte";
 
     import { navigate } from "svelte-routing";
 
-    function getId(){
-        return  window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
-    }
-
     //Fill image with iterable array for svelte
     let restaurantData = {
-        images:[],
-        detailNote:[]
+        images:[]
     };
-
-    const limit = 5;
-    let messageleft = true;
 
     //Init the message Array
     let messageData = [];
     
-    let promiseStart = onMount(async () => {
+    onMount(async () => {
+        //get id from url
+        let url = window.location.href;
+        let id = url.substring(url.lastIndexOf('/') + 1);
         //Restaurants API
-        let response = await fetch(`${API_URL}/restaurant/id/${getId()}`,{
+        await fetch(`${API_URL}/restaurant/id/${id}`,{
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
             }
         })
-        if (response.status == 404){
-            navigate("/Error/404");
-        }
-        let data = await response.json();
-        restaurantData = data.obj;
-        console.log("restaurantData :",restaurantData);
-        console.log("restaurantData.detailNote :",restaurantData.detailNote);
-
-        //get percentage of each note
-        fetch(`${API_URL}/restaurant/id/${getId()}`,{
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            }
-        }).then(response => response.json())
-        
-        //Message API
-        updateMessage(limit,0);
-    })
-
-    async function updateMessage(limit, offset){
-        //Message API
-        let response = await fetch(`${API_URL}/message/all/restaurant/${getId()}?limit=${limit}&offset=${offset}`,{
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            }
+        .then((res) => res.json())
+        .then((data) => {
+            restaurantData = data.obj;
         })
-        if (response.status == 404){
-            navigate("/Error/404");
-        }
-        let data = await response.json();
-        messageData = [...messageData, ...data.obj];
-        messageData.forEach(element => {
-            element.showDropdown = false;
+        .catch((err) => {
+            console.log('HERE');
+            navigate("/Error");
         });
-        messageleft = data.pageleft;
-    }
+        //Message API
+        fetch(`${API_URL}/message/restaurant/${id}?limit=${5}&offset=${0}`,{
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            messageData = data.obj;
+            messageData.forEach(element => {
+                element.showDropdown = false;
+            });
+        }).catch((err) => {
+            console.log('HERE');
+            navigate("/Error", {replace: true});
+        });
+    })
 
     //Fill dropdown button
     //let items = Array(5).fill().map(() => ({ showDropdown: false }));
@@ -84,6 +67,8 @@
     }
 
     function sendReport(index){
+        console.log(messageData[index]);
+        let restaurantId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
         alert("Merci de votre signalement");
         fetch(`${API_URL}/message/report/${messageData[index].id}`,{
             method: "PUT",
@@ -92,46 +77,20 @@
             },
             body: JSON.stringify({
                 "userId": messageData[index].user.id,
-                "restaurantId": getId(),
+                "restaurantId": restaurantId,
                 "messageId": messageData[index].id
             })
         })
     }
-
-    let selectedNote = 0;
-    function onChangeNote(event) {
-		selectedNote = event.currentTarget.value;
-	}
-    async function newComment(e){
-        e.preventDefault();
-        if (textArea.value == "" || selectedNote==0) return;
-        let response = await fetch(`${API_URL}/message/new/restaurant/${getId()}`,{
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            },
-            body: JSON.stringify({
-                "message": textArea.value,
-                "note": selectedNote
-            })
-        })
-        if (response.status == 200) {
-            location.reload();
-        }else{
-            let json = await response.json();
-            alert(json.message);
-        }
-        textArea.value = "";
-        selectedNote = 0;
-    }
-
-    let textArea;
     
-    const adjustHeight = () => {
-        textArea.style.height = 'auto';
-        textArea.style.height = `${textArea.scrollHeight}px`;
-    };
+
+    let note = {
+        5: 69,
+        4: 19,
+        3: 6,
+        2: 2,
+        1: 4
+    }
 </script>
 
 <main>
@@ -180,48 +139,35 @@
           />
         </div>
     </div>
-    {#if isConnected()}
-    <div id="postCommentContainer">
-        <h3>Votre Commentaire</h3>
-        <form on:submit|preventDefault={newComment}>
-            <textarea bind:this={textArea} on:input={adjustHeight} name="comment" id="comment" placeholder="Votre commentaire..." required></textarea>  
-            <div class="rating">
-                <input checked={selectedNote===5} on:change={onChangeNote} name="stars" id="e5" type="radio" value="5" required>
-                <label for="e5">
-                    <span class="material-symbols-rounded">star</span>
-                </label>
-                <input checked={selectedNote===4} on:change={onChangeNote} name="stars" id="e4" type="radio" value="4" required>
-                <label for="e4">
-                    <span class="material-symbols-rounded">star</span>
-                </label>
-                <input checked={selectedNote===3} on:change={onChangeNote} name="stars" id="e3" type="radio" value="3" required>
-                <label for="e3">
-                    <span class="material-symbols-rounded">star</span>
-                </label>
-                <input checked={selectedNote===2} on:change={onChangeNote} name="stars" id="e2" type="radio" value="2" required>
-                <label for="e2">
-                    <span class="material-symbols-rounded">star</span>
-                </label>
-                <input checked={selectedNote===1} on:change={onChangeNote} name="stars" id="e1" type="radio" value="1" required>
-                <label for="e1">
-                    <span class="material-symbols-rounded">star</span>
-                </label>
-            </div>
-            <button type="submit">Envoyer</button>
-        </form>
-    </div>  
-    {/if}
     <div id="avisContainer">
         <h2>Avis</h2>
         <div class="avisFilter">
             <div class="btnFilter">
-                {#each restaurantData.detailNote as element,i}
-                    <div class="line">
-                        <button>{i+1}</button>
-                        <span style="width: {element.percentage}%;"></span>
-                        <p>{element.percentage}%</p>
-                    </div>
-                {/each}
+                <div class="line">
+                    <button>5</button>
+                    <span style="width: {note[5]}%;"></span>
+                    <p>{note[5]}%</p>
+                </div>
+                <div class="line">
+                    <button>4</button>
+                    <span style="width: {note[4]}%;"></span>
+                    <p>{note[4]}%</p>
+                </div>
+                <div class="line">
+                    <button>3</button>
+                    <span style="width: {note[3]}%;"></span>
+                    <p>{note[3]}%</p>
+                </div>
+                <div class="line">
+                    <button>2</button>
+                    <span style="width: {note[2]}%;"></span>
+                    <p>{note[2]}%</p>
+                </div>
+                <div class="line">
+                    <button>1</button>
+                    <span style="width: {note[1]}%;"></span>
+                    <p>{note[1]}%</p>
+                </div>
             </div>
         </div>
         <div class="avisAll">
@@ -252,124 +198,15 @@
                     {/if}
                 </div>
             {/each}
-            {#if messageleft}
-            <button on:click={() => updateMessage(limit,messageData.length)} id="loadMore">
-                <span class="material-symbols-rounded">
-                    expand_more
-                </span>
-                Voir plus
-            </button>
-            {/if}
         </div>
     </div>
 </main>
   
 <style lang="scss">
     main{
-        width: calc(100% - 2 * var(--spacing));
+        width: 50%;
         height: 100%;
-        padding: var(--spacing);
-
-        #postCommentContainer{
-            margin-top: var(--spacing);
-            background-color: var(--zomp);
-            display: flex;
-            flex-direction: column;
-            gap: calc(var(--spacing) / 2);
-            padding: calc(var(--spacing) / 2);
-            justify-content: center;
-            align-items: center;
-            border-radius: var(--radius);
-            position: relative;
-
-            h3{
-                color: var(--black);
-                font-size: 1.2em;
-            }
-
-            form{
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                gap: calc(var(--spacing) / 2);
-
-                textarea{
-                    width: calc(100% - var(--spacing));
-                    min-height: 3em;
-                    max-height: 10em;
-                    border-radius: var(--radius);
-                    background-color: var(--bone);
-                    border: none;
-                    outline: none;
-                    padding: calc(var(--spacing) / 2);
-                    resize: none;
-                    color: var(--black);
-                    font-size: 1em;
-                    font-family: 'Poppins', sans-serif;
-                    overflow-y: auto;
-                }
-
-                .rating {
-                    width: 100%;
-                    overflow: hidden;
-                    display: flex;
-                    justify-content: center;
-                    direction: rtl;
-                    
-                    
-                    input {
-                        float: right;
-                        opacity: 0;
-                        position: absolute;
-                    }
-
-                    a, label {
-                        float:right;
-                        color: var(--cambridge-blue);
-                        text-decoration: none;
-                        -webkit-transition: color .4s;
-                        -moz-transition: color .4s;
-                        -o-transition: color .4s;
-                        transition: color .4s;
-                        display: flex;
-                        justify-content: center;
-
-                        span{
-                            font-size: 3em;
-                        }
-                    }
-
-                    label:hover ~ label,
-                    input:focus ~ label,
-                    label:hover,
-                    a:hover,
-                    a:hover ~ a,
-                    a:focus,
-                    a:focus ~ a{
-                        color: var(--brunswick-green);
-                        cursor: pointer;
-                    }
-                }
-                .rating2 {
-                    direction: rtl;
-                    a {
-                        float:none
-                    }
-                }
-
-                button{
-                    width: 100%;
-                    height: 3em;
-                    border-radius: var(--radius);
-                    background-color: var(--brunswick-green);
-                    color: var(--bone);
-                    font-size: 1em;
-                    border: none;
-                    outline: none;
-                    cursor: pointer;
-                }
-            }
-        }
+        padding: var(--spacing) 25%;
 
         #restauImg{
             width: 100%;
@@ -567,31 +404,6 @@
                 display: flex;
                 flex-direction: column;
                 gap: var(--spacing);
-
-                #loadMore{
-                    width: 100%;
-                    height: 3em;
-                    border-radius: var(--radius);
-                    background-color: var(--brunswick-green);
-                    color: var(--bone);
-                    font-size: 1em;
-                    border: none;
-                    outline: none;
-                    cursor: pointer;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-
-                    &.off{
-                        background-color: var(--zomp);
-                        color: var(--grey);
-                        cursor: not-allowed;
-                    }
-
-                    span{
-                        font-size: 2em;
-                    }
-                }
 
                 .avis{
                     background-color: var(--bone);

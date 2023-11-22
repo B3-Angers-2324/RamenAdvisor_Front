@@ -1,24 +1,52 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { Router, Route, navigate } from "svelte-routing";
-  //Import components routes
-  import Home from "./routes/Home.svelte";
-  import Register from "./routes/register.svelte";
-  import Restaurant from "./routes/restaurant.svelte";
+  
+  import HomeLaptop from "./routes/home/pc.svelte";
+  import HomeMobile from "./routes/home/mobile.svelte";
+
+  import RestaurantLaptop from "./routes/restaurant/pc.svelte";
+  import RestaurantMobile from "./routes/restaurant/mobile.svelte";
+  
+  import RegisterMobile from "./routes/register/mobile.svelte";
+  import Register from "./routes/register/pc.svelte";
+
   import Error from "./routes/40X.svelte";
   import Edit from "./routes/userProfil/profil.svelte";
   import Profil from "./routes/userProfil/profil.svelte";
   export let url = "";
+
+  let mobile = true;
+
+  onMount(() => {
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    if (mediaQuery.matches) {
+      mobile = true;
+    } else {
+      mobile = false;
+    }
+  });
 </script>
 
 
 <main>
   <Router {url}>
     <div>
-      <Route path="/"><Home /></Route>
-      <!--Route path="profile/:name" component="{Profile}" / -- Example using variable inside the path -->
-      <Route path="register/"><Register /></Route>
-      <Route path="profile"><Profil/></Route>
-      <Route path="restaurant/:id" component={Restaurant} /><!--Restaurant/></Route-->
+      {#if mobile}
+        <Route path="/"><HomeMobile /></Route>
+      {:else}
+        <Route path="/"><HomeLaptop /></Route>
+      {/if}
+      {#if mobile}
+        <Route path="register"><RegisterMobile /></Route>
+      {:else}
+        <Route path="register"><Register /></Route>
+      {/if}
+      {#if mobile}
+        <Route path="restaurant/:id"><RestaurantMobile /></Route>
+      {:else}
+        <Route path="restaurant/:id"><RestaurantLaptop /></Route>
+      {/if}
       <Route path="/edit"><Edit/></Route>
       <Route path="error/:err" component={Error} />
       <Route path="*">{navigate("/error/404")}</Route>
