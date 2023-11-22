@@ -3,7 +3,6 @@
   import { Link, navigate } from "svelte-routing";
   import { API_URL } from "../../main";
 
-
   import 'leaflet/dist/leaflet.css';
   import Map from "../../lib/map.svelte";
 
@@ -16,6 +15,12 @@
     requestDataRestaurantFromAPI(`${API_URL}/restaurant/best?limit=${limit}`);
     filterBar = document.getElementById('filterBar');
   })
+
+  let accout_url = "register";
+    console.log(localStorage.getItem("token"));
+    if(localStorage.getItem("token") != null){
+        accout_url = "profile";
+    }
 
   //request the data from the API and update the list of restaurants for an url
   async function requestDataRestaurantFromAPI(url){
@@ -193,7 +198,7 @@
             </span>
         </button>
         <button>
-            <Link to="register/">
+            <Link to={accout_url}>
                 <span class="material-symbols-rounded">
                     account_circle
                 </span>

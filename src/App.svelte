@@ -47,6 +47,7 @@
       {:else}
         <Route path="restaurant/:id"><RestaurantLaptop /></Route>
       {/if}
+      <Route path="/profile"><Profil/></Route>
       <Route path="/edit"><Edit/></Route>
       <Route path="error/:err" component={Error} />
       <Route path="*">{navigate("/error/404")}</Route>
