@@ -7,6 +7,14 @@
     export let value = "";
 
     const handleChange = (e) => {
+        switch(type){
+            case "tel":
+                if(e.target.value.length > 10)
+                    e.target.value = e.target.value.slice(0, 10);
+                else if(e.target.value.length > 0)
+                    e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                break;
+        }
         value = e.target.value;
     }
 </script>

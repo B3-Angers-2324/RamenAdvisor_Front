@@ -264,6 +264,12 @@
                     {/if}
                 </div>
             {/each}
+            <button id="loadMore">
+                <span class="material-symbols-rounded">
+                    expand_more
+                </span>
+                Voir plus
+            </button>
         </div>
     </div>
 </main>
@@ -571,6 +577,25 @@
                 display: flex;
                 flex-direction: column;
                 gap: var(--spacing);
+
+                #loadMore{
+                    width: 100%;
+                    height: 3em;
+                    border-radius: var(--radius);
+                    background-color: var(--brunswick-green);
+                    color: var(--bone);
+                    font-size: 1em;
+                    border: none;
+                    outline: none;
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    span{
+                        font-size: 2em;
+                    }
+                }
 
                 .avis{
                     background-color: var(--bone);

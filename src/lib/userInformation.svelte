@@ -85,7 +85,7 @@
         </CustomSelect>
         <div class="inline">
             <CustomInput type="date" required text="Date" showValid bind:value={date}/>
-            <CustomInput type="phone" required text="Téléphone" bind:value={phone}/>
+            <CustomInput type="tel" required text="Téléphone" bind:value={phone}/>
         </div>
         <CustomInput type="text" text="Ville"  bind:value={city}/>
         <CustomInput type="text" required text="Adresse" bind:value={address}/>
