@@ -15,6 +15,9 @@
         images:[]
     };
 
+    const limit = 5;
+    let messageleft = true;
+
     //Init the message Array
     let messageData = [];
     
@@ -33,7 +36,7 @@
         restaurantData = data.obj;
         
         //Message API
-        updateMessage(5,0);
+        updateMessage(limit,0);
     })
 
     async function updateMessage(limit, offset){
@@ -48,10 +51,11 @@
             navigate("/Error/404");
         }
         let data = await response.json();
-        messageData = data.obj;
+        messageData = [...messageData, ...data.obj];
         messageData.forEach(element => {
             element.showDropdown = false;
         });
+        messageleft = data.pageleft;
     }
 
     //Fill dropdown button
@@ -102,7 +106,7 @@
             })
         })
         if (response.status == 200) {
-            await updateMessage(5,0);
+            location.reload();
         }else{
             let json = await response.json();
             alert(json.message);
@@ -264,12 +268,14 @@
                     {/if}
                 </div>
             {/each}
-            <button id="loadMore">
+            {#if messageleft}
+            <button on:click={() => updateMessage(limit,messageData.length)} id="loadMore">
                 <span class="material-symbols-rounded">
                     expand_more
                 </span>
                 Voir plus
             </button>
+            {/if}
         </div>
     </div>
 </main>
@@ -591,6 +597,12 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
+
+                    &.off{
+                        background-color: var(--zomp);
+                        color: var(--grey);
+                        cursor: not-allowed;
+                    }
 
                     span{
                         font-size: 2em;
