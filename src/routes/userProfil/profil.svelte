@@ -47,6 +47,11 @@
             information["birthDay"] = information["birthDay"].split("T")[0];
         })
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        window.location.href = "/";
+    }
+
     const handleUpdateProfile = () => {
         fetch(`${API_URL}/user/profile`, {
                 method: "PATCH",
@@ -107,6 +112,11 @@
             arrow_back
         </span>
     </Link>
+    <button class="btnIcons" on:click={handleLogout}>
+        <span class="material-symbols-rounded" id="logout" role="button">
+            logout
+        </span>
+    </button>
     <h1>Edit Profil</h1>
     <div id="container">
         <div class="logoContainer">
@@ -258,6 +268,22 @@
             position: absolute;
             top: 0;
             left: 0;
+            padding: 0.25em;
+            font-size: 3.5em;
+            color: var(--bone);
+            z-index: 2;
+            cursor: pointer;
+        }
+
+        .btnIcons{
+            background: transparent;
+            border: none;
+        }
+
+        #logout{
+            position: absolute;
+            top: 0;
+            right: 0;
             padding: 0.25em;
             font-size: 3.5em;
             color: var(--bone);

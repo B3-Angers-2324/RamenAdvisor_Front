@@ -101,7 +101,6 @@
         height: 100vh;
         display: flex;
         justify-content: center;
-        padding-bottom: 100px;
 
         position: relative;
 
