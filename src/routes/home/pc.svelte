@@ -1,8 +1,7 @@
 <script>   
     import { onMount, afterUpdate } from 'svelte';
     import { Link, navigate } from "svelte-routing";
-    import { API_URL } from "../../main";
-  
+    import { API_URL } from "../../main";  
   
     import 'leaflet/dist/leaflet.css';
     import Map from "../../lib/map.svelte";
@@ -113,10 +112,12 @@
         />
     </div>
     <div id="navbar">
-        <div id="img">
-            <img src="../../src/assets/icon.png" alt="">
-            <h2>RamenAdvisor</h2>
-        </div>
+        <Link to="/">
+            <div id="img">
+                <img src="../../src/assets/icon.png" alt="">
+                <h2>RamenAdvisor</h2>
+            </div>
+        </Link>
         <div id="searchContainer">
             <div id="searchBar">
                 <span class="material-symbols-rounded">

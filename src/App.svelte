@@ -8,7 +8,9 @@
   import RestaurantLaptop from "./routes/restaurant/pc.svelte";
   import RestaurantMobile from "./routes/restaurant/mobile.svelte";
   
-  import Register from "./routes/register.svelte";
+  import RegisterMobile from "./routes/register/mobile.svelte";
+  import Register from "./routes/register/pc.svelte";
+
   import Error from "./routes/40X.svelte";
   export let url = "";
 
@@ -33,9 +35,11 @@
       {:else}
         <Route path="/"><HomeLaptop /></Route>
       {/if}
-      <!--Route path="profile/:name" component="{Profile}" / -- Example using variable inside the path -->
-      <Route path="register/"><Register /></Route>
-      <!-- <Route path="restaurant/:id" component={Restaurant} /> -->
+      {#if mobile}
+        <Route path="register"><RegisterMobile /></Route>
+      {:else}
+        <Route path="register"><Register /></Route>
+      {/if}
       {#if mobile}
         <Route path="restaurant/:id"><RestaurantMobile /></Route>
       {:else}
