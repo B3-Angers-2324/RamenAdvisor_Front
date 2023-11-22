@@ -5,6 +5,10 @@ import App from './App.svelte'
 export let API_URL = import.meta.env.VITE_API_URL
 console.log("API_URL: " + API_URL)
 
+export function isConnected() {
+  return localStorage.getItem("token") !== null
+}
+
 
 const app = new App({
   target: document.getElementById('app'),
