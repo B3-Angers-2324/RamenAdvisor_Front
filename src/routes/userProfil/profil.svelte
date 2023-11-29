@@ -35,7 +35,6 @@
     }
 
     async function loadMessages(limit,offset){
-        console.log("Loading messages");
         try{
             let response = await fetch(`${API_URL}/user/message?limit=${limit}&offset=${offset}`,{
             method: "GET",
@@ -45,7 +44,6 @@
             }
             });
             let data = await response.json();
-            console.log(data);
             if (response.ok) {
                 messages = [...messages, ...data.messages];
             } else {
@@ -115,7 +113,7 @@
             })
             .then((data) => {
                 error = data.message;
-            })
+            });
     }
 
     let toRemove = null;
@@ -124,10 +122,19 @@
         toRemove = id;
     }
 
-    const handleDeleteComment = () => {
-        //TODO : Delete comment
-        console.log("WIP : To delete comment\nComment id : ", toRemove);
-        location.reload();
+    const handleDeleteComment = async () => {
+        let response = await fetch(`${API_URL}/message/delete/${toRemove}`,{
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
+        if(response.ok){
+            location.reload();
+        }else{
+            alert((await response.json()).message);
+        }
     }
 </script>
     
