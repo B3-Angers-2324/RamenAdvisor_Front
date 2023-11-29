@@ -5,6 +5,7 @@
     import { onMount } from "svelte";
 
     import { navigate } from "svelte-routing";
+    import Loadmore from "../../lib/loadmore.svelte";
 
     function getId(){
         return  window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
@@ -17,7 +18,7 @@
     };
 
     const limit = 5;
-    let messageleft = true;
+    let more = false;
 
     //Init the message Array
     let messageData = [];
@@ -66,7 +67,7 @@
         messageData.forEach(element => {
             element.showDropdown = false;
         });
-        messageleft = data.pageleft;
+        more = data.more;
     }
 
     //Fill dropdown button
@@ -252,14 +253,7 @@
                     {/if}
                 </div>
             {/each}
-            {#if messageleft}
-            <button on:click={() => updateMessage(limit,messageData.length)} id="loadMore">
-                <span class="material-symbols-rounded">
-                    expand_more
-                </span>
-                Voir plus
-            </button>
-            {/if}
+            <Loadmore on:loadMore={() => updateMessage(limit, messageData.length)} bind:more={more}/>
         </div>
     </div>
 </main>
@@ -567,31 +561,6 @@
                 display: flex;
                 flex-direction: column;
                 gap: var(--spacing);
-
-                #loadMore{
-                    width: 100%;
-                    height: 3em;
-                    border-radius: var(--radius);
-                    background-color: var(--brunswick-green);
-                    color: var(--bone);
-                    font-size: 1em;
-                    border: none;
-                    outline: none;
-                    cursor: pointer;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-
-                    &.off{
-                        background-color: var(--zomp);
-                        color: var(--grey);
-                        cursor: not-allowed;
-                    }
-
-                    span{
-                        font-size: 2em;
-                    }
-                }
 
                 .avis{
                     background-color: var(--bone);

@@ -5,6 +5,8 @@
     import CustomSelect from "../../lib/customSelect.svelte";
     import { API_URL } from "../../main";
     import Modal from "../../lib/modal.svelte";
+    import { onMount } from "svelte";
+    import Loadmore from "../../lib/loadmore.svelte";
 
     let popup = false;
     let information = {
@@ -19,33 +21,62 @@
     }
     let error = "";
     let showModal = false;
+    let limit = 5;
+    let messages = [];
+    let more = false;
 
-    const handlePopup = () => {
-        popup = !popup;
-    }
+    onMount ( async () => {
+        loadUserData();
+        loadMessages(limit,0);
+    })
 
     if(localStorage.getItem("token") == null){
         window.location.href = "/";
     }
 
-    fetch(`${API_URL}/user/profile`, {
+    async function loadMessages(limit,offset){
+        console.log("Loading messages");
+        try{
+            let response = await fetch(`${API_URL}/user/message?limit=${limit}&offset=${offset}`,{
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             }
-        })
-        .then((res) => {
-            if (res.status === 404) {
-                localStorage.removeItem('token');
-                window.location.href = "/";
+            });
+            let data = await response.json();
+            console.log(data);
+            if (response.ok) {
+                messages = [...messages, ...data.messages];
+            } else {
+                throw new Error(data.message);
             }
-            return res.json();
-        })
-        .then((data) => {
-            information = data.user;
-            information["birthDay"] = information["birthDay"].split("T")[0];
-        })
+            more = data.more;
+        }catch(err){
+            console.log(err);
+        }
+    }
+
+    async function loadUserData(){
+        fetch(`${API_URL}/user/profile`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            })
+            .then((res) => {
+                if (res.status === 404) {
+                    localStorage.removeItem('token');
+                    window.location.href = "/";
+                }
+                return res.json();
+            })
+            .then((data) => {
+                information = data.user;
+                information["birthDay"] = information["birthDay"].split("T")[0];
+            })
+    }
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -87,8 +118,16 @@
             })
     }
 
+    let toRemove = null;
+    const handlePopup = (id) => {
+        popup = !popup;
+        toRemove = id;
+    }
+
     const handleDeleteComment = () => {
-        //TODO
+        //TODO : Delete comment
+        console.log("WIP : To delete comment\nComment id : ", toRemove);
+        location.reload();
     }
 </script>
     
@@ -100,7 +139,7 @@
             <p>Êtes-vous sûr de vouloir supprimer ce commentaire ?</p>
             <div id="btnContainer">
                 <button on:click={handlePopup}>Annuler</button>
-                <button>Supprimer</button>
+                <button on:click={handleDeleteComment}>Supprimer</button>
             </div>
         </div>
     </div>
@@ -156,19 +195,20 @@
             </div>
             <div id="comments">
                 <h3>Commentaires</h3>
-                {#each Array(5) as _}
+                {#each messages as msg}
                     <div class="comment">
                         <div class="top">
-                            <p>Restaurant</p>
-                            <p class="note">5/5</p>
+                            <p>{msg.restaurant.name}</p>
+                            <p class="note">{msg.note}/5</p>
                             <!-- svelte-ignore a11y-click-events-have-key-events -->
                             <!-- svelte-ignore a11y-no-static-element-interactions -->
                             <!-- svelte-ignore a11y-click-events-have-key-events -->
-                            <span class="material-symbols-rounded" on:click={handlePopup}>delete</span>
+                            <span class="material-symbols-rounded" on:click={() => handlePopup(msg._id)}>delete</span>
                         </div>
-                        <p>Officia laborum qui consequat nulla. Ad aliquip adipisicing do do minim commodo ipsum consectetur. Aute reprehenderit excepteur cillum fugiat enim enim. Anim sit sint esse laborum. Laborum nisi ad ex non. Officia ea cupidatat deserunt magna ut laborum aliquip quis. Officia nulla labore laboris cupidatat officia reprehenderit minim irure ex.</p>
+                        <p>{msg.message}</p>
                     </div>
                 {/each}
+                <Loadmore on:loadMore={() => loadMessages(limit, messages.length)} bind:more={more}/>
             </div>
             <div id="delete">
                 <button on:click={() => showModal = true}>Supprimer mon compte</button>
@@ -335,6 +375,31 @@
                 }
             }
 
+            #loadMore{
+                    width: 100%;
+                    height: 3em;
+                    border-radius: var(--radius);
+                    background-color: var(--brunswick-green);
+                    color: var(--bone);
+                    font-size: 1em;
+                    border: none;
+                    outline: none;
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    &.off{
+                        background-color: var(--zomp);
+                        color: var(--grey);
+                        cursor: not-allowed;
+                    }
+
+                    span{
+                        font-size: 2em;
+                    }
+                }
+
             #content{
                 position: relative;
                 margin: calc(var(--spacing) / 1.5);
@@ -408,7 +473,7 @@
                     display: flex;
                     padding: calc(var(--spacing) / 2);
                     flex-direction: column;
-                    gap: 2em;
+                    gap: 0.5em;
                     justify-content: center;
                     align-items: center;
 
