@@ -72,17 +72,42 @@
                 }
             })
     }
+    let genderOptions = {
+        'Cis': ['Cisgender', 'Cis female', 'Cis male', 'Cis man', 'Cis woman'],
+        'Trans': ['Trans', 'Trans*', 'Trans female', 'Trans male', 'Trans man', 'Trans person', 'Trans woman'],
+        'Transgender': ['Transgender', 'Transgender female', 'Transgender male', 'Transgender man', 'Transgender person', 'Transgender woman'],
+        'Transsexual': ['Transsexual', 'Transsexual female', 'Transsexual male', 'Transsexual man', 'Transsexual person', 'Transsexual woman'],
+        'Female': ['Cis female', 'Trans female', 'Transgender female', 'Transsexual female'],
+        'Male': ['Cis male', 'Trans male', 'Transgender male', 'Transsexual male'],
+        'Other Genders': [
+        'Abinary', 'Agender', 'Ambigender', 'Androgyne', 'Androgynous', 'Aporagender', 'Autigender', 'Bakla', 'Bigender',
+        'Binary', 'Bissu', 'Butch', 'Calabai', 'Calalai', 'Demi-boy', 'Demi-flux', 'Demi-gender', 'Demi-girl', 'Demi-guy',
+        'Demi-man', 'Demi-woman', 'Dual gender', 'Faʻafafine', 'Femme', 'FTM', 'Gender bender', 'Gender diverse', 'Gender gifted',
+        'Genderfae', 'Genderfluid', 'Genderflux', 'Genderfuck', 'Genderless', 'Gender nonconforming', 'Genderqueer', 'Gender questioning',
+        'Gender variant', 'Graygender', 'Hijra', 'Intergender', 'Intersex', 'Kathoey', 'Māhū', 'Male to female', 'Man of trans experience',
+        'Maverique', 'Meta-gender', 'MTF', 'Multigender', 'Muxe', 'Neither', 'Neurogender', 'Neutrois', 'Non-binary', 'Non-binary transgender',
+        'Omnigender', 'Other', 'Pangender', 'Person of transgendered experience', 'Polygender', 'Sekhet', 'Third gender', 'Travest',
+        'Trigender', 'Tumtum', 'Two spirit', 'Vakasalewalewa', 'Waria', 'Winkte', 'Woman', 'Woman of trans experience', 'X-gender',
+        'X-jendā', 'Xenogender'
+        ]
+    };
 </script>
 
 <userInformation>
     <form action="/user/register" on:submit|preventDefault={handleRegisterSubmit}>
         <CustomInput type="text" required text="Nom" bind:value={name}/>
         <CustomInput type="text" required text="Prénom" bind:value={surname}/>
-        <CustomSelect required text="Sexe" bind:value={sexe}>
-            <option value="Homme">Homme</option>
-            <option value="Femme">Femme</option>
-            <option value="Autre">Autre</option>
-        </CustomSelect>
+        <CustomSelect text="Sexe" bind:value={sexe} required>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            {#each Object.entries(genderOptions) as [group, options]}
+              <optgroup label={group}>
+                {#each options as option}
+                  <option value={option}>{option}</option>
+                {/each}
+              </optgroup>
+            {/each}
+          </CustomSelect>
         <div class="inline">
             <CustomInput type="date" required text="Date" showValid bind:value={date}/>
             <CustomInput type="phone" required text="Téléphone" bind:value={phone}/>
