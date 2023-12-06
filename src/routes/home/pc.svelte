@@ -1,66 +1,67 @@
-<script>   
+<script>
+    import icon from "../../assets/icon.png";
     import { onMount, afterUpdate } from 'svelte';
     import { Link, navigate } from "svelte-routing";
-    import { API_URL } from "../../main";  
-    import icon from "../../assets/icon.png";
-  
+    import { API_URL } from "../../main";
+
     import 'leaflet/dist/leaflet.css';
     import Map from "../../lib/map.svelte";
 
-    let accout_url = "register";
-    console.log(localStorage.getItem("token"));
-    if(localStorage.getItem("token") != null){
-        accout_url = "profile";
-    }
-  
     //Get the restaurants from the API
     let restaurants = [];
     let listPos = undefined;
     const limit = 20;
     let showpin = true;
     onMount ( async () => {
-      requestDataRestaurantFromAPI(`${API_URL}/restaurant/best?limit=${limit}`);
+        requestDataRestaurantFromAPI(`${API_URL}/restaurant/best?limit=${limit}`);
+        filterBar = document.getElementById('filterBar');
     })
-  
+
+    let accout_url = "register";
+        console.log(localStorage.getItem("token"));
+        if(localStorage.getItem("token") != null){
+            accout_url = "profile";
+        }
+
     //request the data from the API and update the list of restaurants for an url
     async function requestDataRestaurantFromAPI(url){
-      fetch(url,{
+        fetch(url,{
         method: "GET",
         headers: {
             "Content-Type": "application/json",
         }
-      })
-      .then((res) => {
+        })
+        .then((res) => {
         if (res.status === 404) {
-          throw new Error("No restaurant found");
+            throw new Error("No restaurant found");
         }
         return res.json();
-      })
-      .then((data) => {
+        })
+        .then((data) => {
         let listProv = [];
         data.obj.forEach((restaurant,i) => {
-          listProv.push(restaurant.position);
-          //At the end of the loop, we update the list
-          if(i >= data.obj.length-1){
+            listProv.push(restaurant.position);
+            //At the end of the loop, we update the list
+            if(i >= data.obj.length-1){
             listPos = listProv;
-          }
+            }
         });
         restaurants = data.obj;
         showpin = true;
-      })
-      .catch((err) => {
+        })
+        .catch((err) => {
         restaurants = [];
         showpin = false;
-      });
+        });
     }
-  
+
     /* === Event for the search and filter bar === */
     let filterState= {
         search: "",
         type: "none",
         accessible: false,
     };
-  
+
     // Function to react on keypress (Is sended to the searchContainer component)
     let onKeypressInSearch = (e) => {
         if(e.key === "Enter"){
@@ -68,7 +69,7 @@
             fetchWithFilterAndSearch(filterState);
         }
     };
-  
+
     //Function to react on filter change (Is sended to the filterBar component)
     let onFilterChange = (e) => {
         //If it's a type change 
@@ -79,33 +80,54 @@
         }
         fetchWithFilterAndSearch(filterState);
     };
-  
+
     async function fetchWithFilterAndSearch(filters){
-  
-      //Build the url based on the filters
-      let url = `${API_URL}/restaurant/search?`;
-      if (filters.search !== "") {
+
+        //Build the url based on the filters
+        let url = `${API_URL}/restaurant/search?`;
+        if (filters.search !== "") {
         url += `search=${filters.search}&`;
-      }
-      if (filters.type !== "") {
+        }
+        if (filters.type !== "") {
         url += `type=${filters.type}&`;
-      }
-      if (filters.accessible !== "") {
+        }
+        if (filters.accessible !== "") {
         url += `accessible=${filters.accessible}&`;
-      }
-      url+=`limit=${limit}`;
-      requestDataRestaurantFromAPI(url)
+        }
+        url+=`limit=${limit}`;
+        requestDataRestaurantFromAPI(url)
     }
-  
+
     let input;
-  
+    let filterBarVisible = false;
+    let filterBar;
+
+    function toggleFilterBar(e){
+        if(window.matchMedia("(max-width: 768px)").matches){
+        if(e.target.placeholder === 'Search' || e.target.tagName === 'SELECT' || e.target.tagName === 'BUTTON' || e.target.tagName === 'P'){
+            filterBar.style.transform = 'translateY(0em)';
+            filterBarVisible = true;
+        } else {
+            filterBar.style.transform = 'translateY(-4.75em)';
+            filterBarVisible = false;
+        }
+        }
+    }
+
+    afterUpdate(() => {
+        window.addEventListener('mousedown', toggleFilterBar);
+        return () => {
+        window.removeEventListener('mousedown', toggleFilterBar);
+        };
+    });
+
     function handleClickRestaurantCard(id) {
         navigate("/restaurant/"+id); // naviguez vers la page "/restaurant/:id"
     }
-
+    
     function handleKeyDownRestaurantCard(event) {
         if (event.key === "Enter") {
-        handleClickRestaurantCard();
+          handleClickRestaurantCard();
         }
     }
 </script>
