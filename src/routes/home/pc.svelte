@@ -1,7 +1,8 @@
 <script>   
     import { onMount, afterUpdate } from 'svelte';
     import { Link, navigate } from "svelte-routing";
-    import { API_URL } from "../../main";  
+    import { API_URL } from "../../main";
+  
   
     import 'leaflet/dist/leaflet.css';
     import Map from "../../lib/map.svelte";
@@ -13,6 +14,7 @@
     let showpin = true;
     onMount ( async () => {
       requestDataRestaurantFromAPI(`${API_URL}/restaurant/best?limit=${limit}`);
+      filterBar = document.getElementById('filterBar');
     })
   
     //request the data from the API and update the list of restaurants for an url
@@ -91,17 +93,38 @@
     }
   
     let input;
+    let filterBarVisible = false;
+    let filterBar;
+  
+    function toggleFilterBar(e){
+      if(window.matchMedia("(max-width: 768px)").matches){
+        if(e.target.placeholder === 'Search' || e.target.tagName === 'SELECT' || e.target.tagName === 'BUTTON' || e.target.tagName === 'P'){
+          filterBar.style.transform = 'translateY(0em)';
+          filterBarVisible = true;
+        } else {
+          filterBar.style.transform = 'translateY(-4.75em)';
+          filterBarVisible = false;
+        }
+      }
+    }
+  
+    afterUpdate(() => {
+      window.addEventListener('mousedown', toggleFilterBar);
+      return () => {
+        window.removeEventListener('mousedown', toggleFilterBar);
+      };
+    });
   
     function handleClickRestaurantCard(id) {
-        navigate("/restaurant/"+id); // naviguez vers la page "/restaurant/:id"
-    }
-
-    function handleKeyDownRestaurantCard(event) {
-        if (event.key === "Enter") {
-        handleClickRestaurantCard();
-        }
-    }
-</script>
+          navigate("/restaurant/"+id); // naviguez vers la page "/restaurant/:id"
+      }
+      
+      function handleKeyDownRestaurantCard(event) {
+          if (event.key === "Enter") {
+            handleClickRestaurantCard();
+          }
+      }
+  </script>
     
         
 <main>
