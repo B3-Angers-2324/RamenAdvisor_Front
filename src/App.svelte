@@ -7,6 +7,7 @@
   import Error from "./routes/40X.svelte";
   import Edit from "./routes/userProfil/profil.svelte";
   import Profil from "./routes/userProfil/profil.svelte";
+  import Liked from "./routes/liked.svelte";
   export let url = "";
 </script>
 
@@ -20,6 +21,7 @@
       <Route path="profile"><Profil/></Route>
       <Route path="restaurant/:id" component={Restaurant} /><!--Restaurant/></Route-->
       <Route path="/edit"><Edit/></Route>
+      <Route path="/liked"><Liked/></Route>
       <Route path="error/:err" component={Error} />
       <Route path="*">{navigate("/error/404")}</Route>
     </div>
