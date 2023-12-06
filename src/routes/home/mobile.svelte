@@ -193,9 +193,11 @@
             </Link>
         </button>
         <button>
+          <Link to="/liked">
             <span class="material-symbols-rounded">
                 favorite
             </span>
+          </Link>
         </button>
         <button>
             <Link to={accout_url}>
