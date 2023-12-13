@@ -1,6 +1,6 @@
 <script>
-    import { onMount } from "svelte";
     import Cropper from 'cropperjs';
+    import { API_URL } from "../main";
 
 	export let showModalPP; // boolean
     export let imageInput;
@@ -31,16 +31,43 @@
             width: 640,
             height: 640,
         });
-        // avatar.src = canvas.toDataURL();
+
         canvas.toBlob((blob) => {
             const formData = new FormData();
+            formData.append('image', blob);
 
-            formData.append('croppedImage', blob);
-
-            console.log(formData.get('croppedImage'));
-
-            // TODO : send the cropped image to the server
+            fetch(`${API_URL}/user/pp`, {
+                method: "PATCH",
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: formData,
+            }).then((res) => res.json())
+            .then((data) => {
+                // refresh the page
+                window.location.reload();
+            })
         });
+
+        // //convert canvas to jpeg
+        // const dataURL = canvas.toDataURL('image/jpeg', 0.8);
+
+        // // convert canvas to webp
+        // // let dataURL = canvas.toDataURL('image/webp');
+
+        // fetch(`${API_URL}/user/pp`, {
+        //         method: "PATCH",
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'Authorization': 'Bearer ' + localStorage.getItem('token')
+        //         },
+        //         body: JSON.stringify({
+        //             image: dataURL,
+        //         }),
+        //     }).then((res) => res.json())
+        //     .then((data) => {
+        //         console.log(data);
+        //     })
     }
 
     const onOpenModal = () => {
@@ -54,7 +81,6 @@
         };
         var reader;
         var file;
-        var url;
 
         if (files && files.length > 0) {
             file = files[0];
@@ -75,14 +101,9 @@
                 zoomable: false, // Désactive le zoom
             });
         }
-
-        // cropper = new Cropper(imageElement, {
-        //     aspectRatio: 1,
-        //     viewMode: 3,
-        //     preview: '.preview'
-        // });
     }
 
+    // detect when the modal is open and call onOpenModal()
     $:{showModalPP && onOpenModal()}
 </script>
 
@@ -119,12 +140,6 @@
 
 <style>
     @import "cropperjs/dist/cropper.css";
-
-    /* .img-container{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    } */
 
     #image{
         max-width: 60%;

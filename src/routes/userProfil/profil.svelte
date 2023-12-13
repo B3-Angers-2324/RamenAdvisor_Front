@@ -5,9 +5,11 @@
     import CustomSelect from "../../lib/customSelect.svelte";
     import { API_URL } from "../../main";
     import Modal from "../../lib/modal.svelte";
-    import CropModal from "../../lib/cropModal/cropModal.svelte";
+    import CropModal from "../../lib/cropModal.svelte";
     import { onMount } from "svelte";
     import Loadmore from "../../lib/loadmore.svelte";
+
+    import BlankProfile from "../../assets/blank-profile.jpg";
 
     let popup = false;
     let information = {
@@ -76,6 +78,11 @@
             .then((data) => {
                 information = data.user;
                 information["birthDay"] = information["birthDay"].split("T")[0];
+                if(information["image"] == "000000000000000000000000"){
+                    information["image"] = BlankProfile;
+                }else{
+                    information["image"] = `${API_URL}/image/${information['image']}`;
+                }
             })
     }
 
@@ -188,7 +195,7 @@
     <div id="container">
         <div class="logoContainer">
             <div class="imageEdit">
-                <img src="https://thispersondoesnotexist.com/" alt="Logo app">
+                <img src={information["image"]} alt="Logo app">
                 <input type="file" id="newImagePP" bind:this={imageInput} on:change={handleUpdateImageProfile}>
                 <label for="newImagePP" class="overlay">
                     <span class="material-symbols-rounded">
@@ -198,7 +205,7 @@
             </div>
         </div>
         <div id="content">
-            <h2>{information["firstName"] + information['lastName']}</h2>
+            <h2>{information["firstName"]} {information['lastName']}</h2>
             <div id="cityContainer">
                 <span class="material-symbols-rounded">
                     location_on
@@ -274,7 +281,7 @@
     <div id="container">
         <div class="logoContainer">
             <div class="imageEdit">
-                <img src="https://thispersondoesnotexist.com/" alt="Logo app">
+                <img src={information["image"]} alt="Logo app">
                 <input type="file" id="newImagePP" bind:this={imageInput} on:change={handleUpdateImageProfile}>
                 <label for="newImagePP" class="overlay">
                     <span class="material-symbols-rounded">
@@ -284,7 +291,7 @@
             </div>
         </div>
         <div id="content">
-            <h2>{information["firstName"] + information['lastName']}</h2>
+            <h2>{information["firstName"]} {information['lastName']}</h2>
             <div id="cityContainer">
                 <span class="material-symbols-rounded">
                     location_on

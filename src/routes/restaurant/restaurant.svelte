@@ -7,6 +7,8 @@
     import { navigate } from "svelte-routing";
     import Loadmore from "../../lib/loadmore.svelte";
 
+    import BlankProfile from "../../assets/blank-profile.jpg";
+
     function getId(){
         return  window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
     }
@@ -36,8 +38,8 @@
         }
         let data = await response.json();
         restaurantData = data.obj;
-        console.log("restaurantData :",restaurantData);
-        console.log("restaurantData.detailNote :",restaurantData.detailNote);
+        // console.log("restaurantData :",restaurantData);
+        // console.log("restaurantData.detailNote :",restaurantData.detailNote);
 
         //get percentage of each note
         fetch(`${API_URL}/restaurant/id/${getId()}`,{
@@ -66,6 +68,12 @@
         messageData = [...messageData, ...data.obj];
         messageData.forEach(element => {
             element.showDropdown = false;
+            //Check if the user has a profile picture or not
+            if(element.user.img == "000000000000000000000000"){
+                element.user.img = BlankProfile;
+            }else{
+                element.user.img = `${API_URL}/image/${element.user.img}`;
+            }
         });
         more = data.more;
     }
@@ -241,7 +249,7 @@
         <div class="avisAll">
             {#each messageData as msg, i}
                 <div class="avis">
-                    <img src="http://thispersondoesnotexist.com/" alt="profil"/>
+                    <img src={msg.user.img} alt="profil"/>
                     <div class="top">
                     <h4>{msg.user.firstName} {msg.user.lastName}</h4>
                     <p>{msg.note}/5</p>
@@ -333,7 +341,7 @@
         <div class="avisAll">
             {#each messageData as msg, i}
                 <div class="avis">
-                    <img src="http://thispersondoesnotexist.com/" alt="profil"/>
+                    <img src={msg.user.img} alt="profil"/>
                     <div class="top">
                     <h4>{msg.user.firstName} {msg.user.lastName}</h4>
                     <p>{msg.note}/5</p>
