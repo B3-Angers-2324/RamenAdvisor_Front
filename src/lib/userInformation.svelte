@@ -39,6 +39,10 @@
             error = "Invalid date";
             return;
         }
+        if(!date.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)){
+            error = "Invalid date";
+            return;
+        }
         let passwordHash = SHA256(password).toString();
         const data = {
             firstName: name,
