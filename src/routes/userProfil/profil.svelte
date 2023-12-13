@@ -5,6 +5,7 @@
     import CustomSelect from "../../lib/customSelect.svelte";
     import { API_URL } from "../../main";
     import Modal from "../../lib/modal.svelte";
+    import CropModal from "../../lib/cropModal/cropModal.svelte";
     import { onMount } from "svelte";
     import Loadmore from "../../lib/loadmore.svelte";
 
@@ -21,6 +22,8 @@
     }
     let error = "";
     let showModal = false;
+    let showModalPP = false;
+    let imageInput;
     let limit = 5;
     let messages = [];
     let more = false;
@@ -94,6 +97,10 @@
             .then((data) => {
                 error = data.message;
             })
+    }
+
+    const handleUpdateImageProfile = (e) => {
+        showModalPP = true;
     }
 
     const handleDeleteProfile = () => {
@@ -180,7 +187,15 @@
     <h1>Edit Profil</h1>
     <div id="container">
         <div class="logoContainer">
-            <img src="https://thispersondoesnotexist.com/" alt="Logo app">
+            <div class="imageEdit">
+                <img src="https://thispersondoesnotexist.com/" alt="Logo app">
+                <input type="file" id="newImagePP" bind:this={imageInput} on:change={handleUpdateImageProfile}>
+                <label for="newImagePP" class="overlay">
+                    <span class="material-symbols-rounded">
+                        edit
+                    </span>
+                </label>
+            </div>
         </div>
         <div id="content">
             <h2>{information["firstName"] + information['lastName']}</h2>
@@ -239,6 +254,9 @@
     <Modal bind:showModal validate={handleDeleteProfile}>
         <h2 slot="header">Voulez-vous vraiment supprimer votre compte ?</h2>
     </Modal>
+
+    <CropModal bind:showModalPP bind:imageInput>
+    </CropModal>
 </main>
 {:else}
 <main id="pc">
@@ -255,7 +273,15 @@
     <h1>Edit Profil</h1>
     <div id="container">
         <div class="logoContainer">
-            <img src="https://thispersondoesnotexist.com/" alt="Logo app">
+            <div class="imageEdit">
+                <img src="https://thispersondoesnotexist.com/" alt="Logo app">
+                <input type="file" id="newImagePP" bind:this={imageInput} on:change={handleUpdateImageProfile}>
+                <label for="newImagePP" class="overlay">
+                    <span class="material-symbols-rounded">
+                        edit
+                    </span>
+                </label>
+            </div>
         </div>
         <div id="content">
             <h2>{information["firstName"] + information['lastName']}</h2>
@@ -314,6 +340,9 @@
     <Modal bind:showModal validate={handleDeleteProfile}>
         <h2 slot="header">Voulez-vous vraiment supprimer votre compte ?</h2>
     </Modal>
+
+    <CropModal bind:showModalPP bind:imageInput>
+    </CropModal>
 </main>
 {/if}
     
@@ -463,12 +492,49 @@
                 justify-content: center;
                 align-items: center;
 
-                img{
+                .imageEdit{
                     position: relative;
                     width: 85%;
                     height: 85%;
                     border-radius: 50%;
                     object-fit: cover;
+                    overflow: hidden;
+
+                    img{
+                        display: block;
+                        width: 100%;
+                        height: 100%;
+                    }
+
+                    .overlay{
+                        position: absolute; 
+                        bottom: 0; 
+                        background: rgba(0, 0, 0, 0.5); /* Black see-through */
+                        width: 100%;
+                        height: 100%;
+                        transition: .5s ease;
+                        opacity:0;
+                        color: white;
+                        font-size: 20px;
+                        text-align: center;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+
+                    input{
+                        width: 0.1px;
+                        height: 0.1px;
+                        opacity: 0;
+                        overflow: hidden;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                }
+
+                &:hover .overlay{
+                    opacity: 1;
+                    cursor: pointer;
                 }
             }
 
@@ -710,12 +776,49 @@
                 justify-content: center;
                 align-items: center;
 
-                img{
+                .imageEdit{
                     position: relative;
                     width: 85%;
                     height: 85%;
                     border-radius: 50%;
                     object-fit: cover;
+                    overflow: hidden;
+
+                    img{
+                        display: block;
+                        width: 100%;
+                        height: 100%;
+                    }
+
+                    .overlay{
+                        position: absolute; 
+                        bottom: 0; 
+                        background: rgba(0, 0, 0, 0.5); /* Black see-through */
+                        width: 100%;
+                        height: 100%;
+                        transition: .5s ease;
+                        opacity:0;
+                        color: white;
+                        font-size: 20px;
+                        text-align: center;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+
+                    input{
+                        width: 0.1px;
+                        height: 0.1px;
+                        opacity: 0;
+                        overflow: hidden;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                }
+
+                &:hover .overlay{
+                    opacity: 1;
+                    cursor: pointer;
                 }
             }
 
