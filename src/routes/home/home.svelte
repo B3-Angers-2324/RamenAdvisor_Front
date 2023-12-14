@@ -10,11 +10,12 @@
   //Get the restaurants from the API
   let restaurants = [];
   let listPos = undefined;
+  var foodtypes = {};
   const limit = 20;
   let showpin = true;
   onMount ( async () => {
+    getAllFoodTypes();
     requestDataRestaurantFromAPI(`${API_URL}/restaurant/best?limit=${limit}`);
-    filterBar = document.getElementById('filterBar');
   })
 
   let accout_url = "register";
@@ -131,6 +132,22 @@
       }
   }
 
+  const getAllFoodTypes = () => {
+        foodtypes = {};
+        fetch(`${API_URL}/foodtype`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                data.forEach((foodtype) => {
+                  foodtypes[foodtype.name] = foodtype.imgId;
+                })
+            })
+    }
+
   let mobile = window.matchMedia("(max-width: 768px)").matches;
 
   function checkScreenSize() {
@@ -161,14 +178,13 @@
           </span>
           <input type="text" placeholder="Search" bind:this={input} on:click|stopPropagation={toggleFilterBar}  on:keydown={onKeypressInSearch}/>
       </div>
-        <div id="filterBar">
+        <div id="filterBar" bind:this={filterBar}>
           <div class="filterItem">
               <select name="Type" id="type" on:change={onFilterChange} value="{filterState.type}">
                   <option value="none">Tout type</option>
-                  <option value="local_pizza">Pizza</option>
-                  <option value="lunch_dining">Dinner</option>
-                  <option value="fastfood">Fast-food</option>
-                  <option value="restaurant">Restaurant</option>
+                  {#each Object.keys(foodtypes) as foodtype}
+                    <option value={foodtype}>{foodtype}</option>
+                  {/each}
               </select>
           </div>
       
@@ -186,12 +202,16 @@
           <!-- <RestaurantCard name={restaurant.name} note={restaurant.note} images={restaurant.images} foodtype={restaurant.foodtype} id={restaurant.id}/> -->
           <div id="restaurantCard" on:click={() => handleClickRestaurantCard(restaurant.id)} on:keydown={handleKeyDownRestaurantCard} role="button" tabindex=0>
             <div class="info">
-              <span class="material-symbols-rounded type">
-                  {restaurant.foodtype}
-              </span>
+              <img src={`${API_URL}/image/${foodtypes[restaurant.foodtype]}`} class="foodtype" alt="">
               <p class="note">{restaurant.note/10}/5</p>
             </div>
-            <img src={restaurant.images[0]} alt="restaurant"/>
+            {#if restaurant.images.length > 0}
+              <img src={`${API_URL}/image/${restaurant.images[0]}`} alt=""/>
+            {:else}
+              <div class="overlay always">
+                  <span class="material-symbols-rounded">hide_image</span>
+              </div>
+            {/if}
             <div class="name">
                 <h1>{restaurant.name}</h1>
             </div>
@@ -251,14 +271,13 @@
               </span>
               <input type="text" placeholder="Search" bind:this={input} on:keydown={() => {}}/>
           </div>
-          <div id="filterBar">
+          <div id="filterBar" bind:this={filterBar}>
               <div class="filterItem">
                   <select name="Type" id="type" on:change={onFilterChange} value="{filterState.type}">
-                      <option value="none">Tout type</option>
-                      <option value="local_pizza">Pizza</option>
-                      <option value="lunch_dining">Dinner</option>
-                      <option value="fastfood">Fast-food</option>
-                      <option value="restaurant">Restaurant</option>
+                    <option value="none">Tout type</option>
+                    {#each Object.keys(foodtypes) as foodtype}
+                      <option value={foodtype}>{foodtype}</option>
+                    {/each}
                   </select>
               </div>
           
@@ -292,14 +311,18 @@
           <div id="restaurantContainer">
               {#each restaurants as restaurant}
                   <div id="restaurantCard" on:click={() => handleClickRestaurantCard(restaurant.id)} on:keydown={handleKeyDownRestaurantCard} role="button" tabindex=0>
-                      <img src={restaurant.images[0]} alt="restaurant"/>
+                      {#if restaurant.images.length > 0}
+                        <img src={`${API_URL}/image/${restaurant.images[0]}`} alt=""/>
+                      {:else}
+                        <div class="overlay always">
+                            <span class="material-symbols-rounded">hide_image</span>
+                        </div>
+                      {/if}
                       <div class="info">
                           <div class="name">
                               <h1>{restaurant.name}</h1>
                           </div>
-                          <span class="material-symbols-rounded type">
-                              {restaurant.foodtype}
-                          </span>
+                          <img src={`${API_URL}/image/${foodtypes[restaurant.foodtype]}`} class="foodtype" alt="">
                           <p class="note">{restaurant.note/10}/5</p>
                       </div>
                   </div>
@@ -498,6 +521,35 @@
           overflow: visible;
           cursor: pointer;
           user-select: none;
+          position: relative;
+
+          .overlay{
+            background: rgba(0, 0, 0, 0.5); /* Black see-through */
+            position: absolute;
+            height: 8em;
+            width: 8em;
+            color: white;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border-radius: var(--radius);
+            transform: translateX(-20px) translateY(-20px);
+
+            span{
+                font-size: 2em;
+            }
+          }
+
+          img {
+            position: absolute;
+            height: 8em;
+            width: 8em;
+            border-radius: var(--radius);
+            transform: translateX(-20px) translateY(-20px);
+            object-fit: cover;
+          }
 
           .info {
             position: absolute;
@@ -510,6 +562,14 @@
             gap: 20px;
             justify-content: center;
             align-items: center;
+
+            .foodtype{
+              width: 2em;
+              height: 2em;
+              border-radius: 50%;
+              position: relative;
+              transform: translate(0px, 0px);
+            }
 
             .type,
             .note {
@@ -526,15 +586,6 @@
               font-weight: bold;
               font-family: var(--font-family);
             }
-          }
-
-          img {
-            position: absolute;
-            height: 8em;
-            width: 8em;
-            border-radius: var(--radius);
-            transform: translateX(-20px) translateY(-20px);
-            object-fit: cover;
           }
         }
 
@@ -822,12 +873,39 @@
                     user-select: none;
                     display: flex;
                     align-items: center;
+                    position: relative;
+
+                    .overlay{
+                        bottom: 0; 
+                        background: rgba(0, 0, 0, 0.5); /* Black see-through */
+                        height: 6em;
+                        width: 12em;
+                        color: white;
+                        text-align: center;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        flex-direction: column;
+                        border-radius: var(--radius);
+
+                        span{
+                            font-size: 2em;
+                        }
+                    }
 
                     .info {
                         width: 100%;
                         height: 100%;
                         position: relative;
                         display: flex;
+
+                        .foodtype{
+                          width: 2em;
+                          height: 2em;
+                          border-radius: 50%;
+                          position: relative;
+                          transform: translate(0px, 0px);
+                        }
 
                         .type {
                             position: absolute;

@@ -45,7 +45,7 @@
             if (data.token) {
                 error = "";
                 localStorage.setItem("token", data.token);
-                window.location.href = "/";
+                window.location.href = "/profile";
             } else {
                 error = data.message;
             }
