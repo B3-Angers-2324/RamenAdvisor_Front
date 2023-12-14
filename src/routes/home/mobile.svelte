@@ -183,6 +183,11 @@
             </div>
           </div>
         {/each}
+        {#if restaurants.length === 0}
+          <div id="restaurantCard">
+            <p>Aucun restaurant trouvé</p>
+          </div>
+        {/if}
       </div>
       <div id="navBar">
         <button>
