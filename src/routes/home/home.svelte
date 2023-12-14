@@ -145,7 +145,6 @@
                 data.forEach((foodtype) => {
                   foodtypes[foodtype.name] = foodtype.imgId;
                 })
-                console.log(foodtypes);
             })
     }
 
@@ -206,7 +205,13 @@
               <img src={`${API_URL}/image/${foodtypes[restaurant.foodtype]}`} class="foodtype" alt="">
               <p class="note">{restaurant.note/10}/5</p>
             </div>
-            <img src={restaurant.images[0]} alt="restaurant"/>
+            {#if restaurant.images.length > 0}
+              <img src={`${API_URL}/image/${restaurant.images[0]}`} alt=""/>
+            {:else}
+              <div class="overlay always">
+                  <span class="material-symbols-rounded">hide_image</span>
+              </div>
+            {/if}
             <div class="name">
                 <h1>{restaurant.name}</h1>
             </div>
@@ -301,7 +306,13 @@
           <div id="restaurantContainer">
               {#each restaurants as restaurant}
                   <div id="restaurantCard" on:click={() => handleClickRestaurantCard(restaurant.id)} on:keydown={handleKeyDownRestaurantCard} role="button" tabindex=0>
-                      <img src={restaurant.images[0]} alt="restaurant"/>
+                      {#if restaurant.images.length > 0}
+                        <img src={`${API_URL}/image/${restaurant.images[0]}`} alt=""/>
+                      {:else}
+                        <div class="overlay always">
+                            <span class="material-symbols-rounded">hide_image</span>
+                        </div>
+                      {/if}
                       <div class="info">
                           <div class="name">
                               <h1>{restaurant.name}</h1>
@@ -505,6 +516,35 @@
           overflow: visible;
           cursor: pointer;
           user-select: none;
+          position: relative;
+
+          .overlay{
+            background: rgba(0, 0, 0, 0.5); /* Black see-through */
+            position: absolute;
+            height: 8em;
+            width: 8em;
+            color: white;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border-radius: var(--radius);
+            transform: translateX(-20px) translateY(-20px);
+
+            span{
+                font-size: 2em;
+            }
+          }
+
+          img {
+            position: absolute;
+            height: 8em;
+            width: 8em;
+            border-radius: var(--radius);
+            transform: translateX(-20px) translateY(-20px);
+            object-fit: cover;
+          }
 
           .info {
             position: absolute;
@@ -541,15 +581,6 @@
               font-weight: bold;
               font-family: var(--font-family);
             }
-          }
-
-          img {
-            position: absolute;
-            height: 8em;
-            width: 8em;
-            border-radius: var(--radius);
-            transform: translateX(-20px) translateY(-20px);
-            object-fit: cover;
           }
         }
 
@@ -837,6 +868,25 @@
                     user-select: none;
                     display: flex;
                     align-items: center;
+                    position: relative;
+
+                    .overlay{
+                        bottom: 0; 
+                        background: rgba(0, 0, 0, 0.5); /* Black see-through */
+                        height: 6em;
+                        width: 12em;
+                        color: white;
+                        text-align: center;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        flex-direction: column;
+                        border-radius: var(--radius);
+
+                        span{
+                            font-size: 2em;
+                        }
+                    }
 
                     .info {
                         width: 100%;

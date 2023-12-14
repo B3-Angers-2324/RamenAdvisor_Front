@@ -31,10 +31,17 @@
             width: 640,
             height: 640,
         });
+        
 
         canvas.toBlob((blob) => {
             const formData = new FormData();
             formData.append('image', blob);
+
+            // test if the image is under 15Mo
+            if (blob.size > 15000000) {
+                alert("The image must be under 15Mo");
+                return;
+            }
 
             fetch(`${API_URL}/user/pp`, {
                 method: "PATCH",

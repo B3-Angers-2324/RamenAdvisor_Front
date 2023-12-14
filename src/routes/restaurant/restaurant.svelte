@@ -158,22 +158,30 @@
 {#if mobile}
 <main id="mobile">
     <div id="restauImg">
-        <img src="{restaurantData.images[currentImageIndex]}" alt=""/>
+        {#if restaurantData.images.length > 0}
+            <img src={`${API_URL}/image/${restaurantData.images[currentImageIndex]}`} alt=""/>
+        {:else}
+            <div class="overlay always">
+                <span class="material-symbols-rounded">hide_image</span>
+            </div>
+        {/if}
         <div class="icon">
             <Link to="/">
                 <span class="material-symbols-rounded">arrow_back</span>
             </Link>
             <span class="material-symbols-rounded">favorite</span>
         </div>
-        <div class="caroussel">
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            {#each restaurantData.images as image, index}
-                <!-- svelte-ignore a11y-no-static-element-interactions -->
-                <div class="img-container" on:click={() => updateImage(index)}>
-                    <img src="{image}" alt=""/>
-                </div>
-            {/each}
-        </div>        
+        {#if restaurantData.images.length > 0}
+            <div class="caroussel">
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                {#each restaurantData.images as image, index}
+                    <!-- svelte-ignore a11y-no-static-element-interactions -->
+                    <div class="img-container" on:click={() => updateImage(index)}>
+                        <img src={`${API_URL}/image/${image}`} alt=""/>
+                    </div>
+                {/each}
+            </div>
+        {/if}     
     </div>
     <div id="restauInfo">
         <div class="nameAndnote">
@@ -281,22 +289,30 @@
 {:else}
 <main id="pc">
     <div id="restauImg">
-        <img src="{restaurantData.images[currentImageIndex]}" alt=""/>
+        {#if restaurantData.images.length > 0}
+            <img src={`${API_URL}/image/${restaurantData.images[currentImageIndex]}`} alt=""/>
+        {:else}
+            <div class="overlay always">
+                <span class="material-symbols-rounded">hide_image</span>
+            </div>
+        {/if}
         <div class="icon">
             <Link to="/">
                 <span class="material-symbols-rounded">arrow_back</span>
             </Link>
             <span class="material-symbols-rounded">favorite</span>
         </div>
-        <div class="caroussel">
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            {#each restaurantData.images as image, index}
-                <!-- svelte-ignore a11y-no-static-element-interactions -->
-                <div class="img-container" on:click={() => updateImage(index)}>
-                    <img src="{image}" alt=""/>
-                </div>
-            {/each}
-        </div>        
+        {#if restaurantData.images.length > 0}
+            <div class="caroussel">
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                {#each restaurantData.images as image, index}
+                    <!-- svelte-ignore a11y-no-static-element-interactions -->
+                    <div class="img-container" on:click={() => updateImage(index)}>
+                        <img src={`${API_URL}/image/${image}`} alt=""/>
+                    </div>
+                {/each}
+            </div>
+        {/if}      
     </div>
     <div id="restauInfo">
         <div class="nameAndnote">
@@ -485,6 +501,25 @@
             position: relative;
             overflow: hidden;
             border-radius: var(--radius);
+
+            .overlay{
+                background: rgba(0, 0, 0, 0.5); /* Black see-through */
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                object-position: center;
+                color: white;
+                text-align: center;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                border-radius: var(--radius);
+
+                span{
+                    font-size: 5em;
+                }
+            }
 
             img{
                 width: 100%;
@@ -789,6 +824,25 @@
             position: relative;
             overflow: hidden;
             border-radius: var(--radius);
+
+            .overlay{
+                background: rgba(0, 0, 0, 0.5); /* Black see-through */
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                object-position: center;
+                color: white;
+                text-align: center;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                border-radius: var(--radius);
+
+                span{
+                    font-size: 5em;
+                }
+            }
 
             img{
                 width: 100%;
