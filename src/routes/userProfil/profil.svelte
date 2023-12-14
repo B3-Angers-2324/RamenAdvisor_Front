@@ -5,7 +5,7 @@
     import CustomSelect from "../../lib/customSelect.svelte";
     import { API_URL } from "../../main";
     import Modal from "../../lib/modal.svelte";
-    import CropModal from "../../lib/cropModal.svelte";
+    import CropModal from "../../lib/cropper/cropModal.svelte";
     import { onMount } from "svelte";
     import Loadmore from "../../lib/loadmore.svelte";
 
@@ -108,6 +108,7 @@
 
     const handleUpdateImageProfile = (e) => {
         showModalPP = true;
+        document.body.style.overflow = 'hidden';
     }
 
     const handleDeleteProfile = () => {

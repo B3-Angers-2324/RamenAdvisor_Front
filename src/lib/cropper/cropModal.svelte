@@ -1,6 +1,6 @@
 <script>
     import Cropper from 'cropperjs';
-    import { API_URL } from "../main";
+    import { API_URL } from "../../main";
 
 	export let showModalPP; // boolean
     export let imageInput;
@@ -110,7 +110,10 @@
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
 <dialog
 	bind:this={dialog}
-	on:close={() => (showModalPP = false)}
+	on:close={() => {
+        showModalPP = false
+        document.body.style.overflow = 'scroll';
+}}
 	
 >
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -120,9 +123,6 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="modalLabel">Crop the image</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close" on:click={closeModal}>
-                <span aria-hidden="true">&times;</span>
-              </button>
             </div>
             <div class="modal-body">
               <div class="img-container">
@@ -139,10 +139,88 @@
 </dialog>
 
 <style>
-    @import "cropperjs/dist/cropper.css";
+    @import "./cropper.css";
 
+    dialog{
+        width: 75%;
+        height: 75%;
+        max-width: 75%;
+        max-height: 75%;
+        border: none;
+        position: relative;
+        border-radius: var(--radius);
+        background-color: var(--bone);
+        padding: var(--spacing);
+    }
+    
     #image{
-        max-width: 60%;
-        max-height: 60%;
+        max-width: 40%;
+        max-height: 40%;
+    }
+    
+    .modal{
+        width: 100%;
+        height: 100%;
+    }
+
+    
+    .modal-dialog,
+    .modal-content{
+        height: 100%;
+    }
+    
+    .modal-content{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .modal-header,
+    .modal-footer{
+        height: 3em;
+        width: 100%;
+    }
+    .modal-body{
+        width: 100%;
+        flex: 1;
+    }
+    .modal-header{
+        margin-bottom: 1em;
+    }
+    .modal-header h5{
+        color: var(--black);
+        font-size: 1.5em;
+        font-weight: 600;
+    }
+
+    .modal-footer{
+        margin-top: 1em;
+        display: flex;
+        align-items: center;
+        gap: 1em;
+        width: 75%;
+    }
+
+    .modal-footer button{
+        background-color: var(--brunswick-green);
+        color: var(--bone);
+        border: none;
+        height: 2.5em;
+        width: 50%;
+        font-size: 1em;
+        padding: 10px 0;
+        border-radius: var(--radius);
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .modal-footer button:hover{
+        cursor: pointer;
+    }
+
+    .img-container{
+        height: 100%;
     }
 </style>
