@@ -56,7 +56,6 @@
             }
             more = data.more;
         }catch(err){
-            console.log(err);
         }
     }
 
