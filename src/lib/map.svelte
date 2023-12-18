@@ -3,6 +3,7 @@
     import L from 'leaflet';
 
     import markerImg from '../assets/markerLeaflet.png';
+    import shadowImg from '../assets/shadow.png';
 
     export let dragging = false;
     export let positions = undefined;
@@ -18,9 +19,12 @@
 
     const customMarker = L.icon({
         iconUrl: markerImg,
+        shadowUrl: shadowImg,
 
-        iconSize:     [52, 82], // size of the icon
-        iconAnchor:   [26, 81], // point of the icon which will correspond to marker's location
+        iconSize:     [50, 50], // size of the icon
+        iconAnchor:   [25, 43], // point of the icon which will correspond to marker's location
+        shadowSize: [50, 50],
+        shadowAnchor: [25, 25],
     });
 
     onMount(() => {
