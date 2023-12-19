@@ -19,7 +19,10 @@
     //Fill image with iterable array for svelte
     let restaurantData = {
         images:[],
-        detailNote:[]
+        detailNote:[],
+        email: "",
+        tel: "",
+        web: ""
     };
 
     const limit = 5;
@@ -41,6 +44,7 @@
         }
         let data = await response.json();
         restaurantData = data.obj;
+        console.log(restaurantData);
 
         //get percentage of each note
         fetch(`${API_URL}/restaurant/id/${getId()}`,{
@@ -228,15 +232,21 @@
             {restaurantData.address}, Angers
         </p>
         <div class="link">
-            <a href="#">
-                <span class="material-symbols-rounded">mail</span>
-            </a>
-            <a href="#">
-                <span class="material-symbols-rounded">phone</span>
-            </a>
-            <a href="#">
-                <span class="material-symbols-rounded">language</span>
-            </a>
+            {#if restaurantData.email}
+                <a href={`mailto:${restaurantData.email}`}>
+                    <span class="material-symbols-rounded">mail</span>
+                </a>
+            {/if}
+            {#if restaurantData.tel}
+                <a href={`tel:${restaurantData.tel}`}>
+                    <span class="material-symbols-rounded">phone</span>
+                </a>
+            {/if}
+            {#if restaurantData.web}
+                <a href={restaurantData.web} target="_blank">
+                    <span class="material-symbols-rounded">language</span>
+                </a>
+            {/if}
         </div>
         <div class="map">
             <Map 
@@ -359,15 +369,21 @@
             {restaurantData.address}, Angers
         </p>
         <div class="link">
-            <a href="#">
-                <span class="material-symbols-rounded">mail</span>
-            </a>
-            <a href="#">
-                <span class="material-symbols-rounded">phone</span>
-            </a>
-            <a href="#">
-                <span class="material-symbols-rounded">language</span>
-            </a>
+            {#if restaurantData.email}
+                <a href={`mailto:${restaurantData.email}`}>
+                    <span class="material-symbols-rounded">mail</span>
+                </a>
+            {/if}
+            {#if restaurantData.tel}
+                <a href={`tel:${restaurantData.tel}`}>
+                    <span class="material-symbols-rounded">phone</span>
+                </a>
+            {/if}
+            {#if restaurantData.web}
+                <a href={restaurantData.web} target="_blank">
+                    <span class="material-symbols-rounded">language</span>
+                </a>
+            {/if}
         </div>
         <div class="map">
             <Map 
@@ -700,6 +716,7 @@
                     justify-content: center;
                     align-items: center;
                     color: var(--bone);
+                    margin: auto;
     
                     span{
                         font-size: 2.5em;
@@ -1129,6 +1146,7 @@
                     justify-content: center;
                     align-items: center;
                     color: var(--bone);
+                    margin: auto;
     
                     span{
                         font-size: 2.5em;
