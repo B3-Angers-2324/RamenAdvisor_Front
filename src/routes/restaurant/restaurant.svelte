@@ -38,8 +38,6 @@
         }
         let data = await response.json();
         restaurantData = data.obj;
-        // console.log("restaurantData :",restaurantData);
-        // console.log("restaurantData.detailNote :",restaurantData.detailNote);
 
         //get percentage of each note
         fetch(`${API_URL}/restaurant/id/${getId()}`,{

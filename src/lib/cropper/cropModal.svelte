@@ -11,7 +11,6 @@
 	$: if (dialog && showModalPP) dialog.showModal();
 
     const handleUpdateImage = () => {
-        console.log("update image");
     }
 
     const resetCropper = () => {
@@ -73,7 +72,6 @@
         //         }),
         //     }).then((res) => res.json())
         //     .then((data) => {
-        //         console.log(data);
         //     })
     }
 
