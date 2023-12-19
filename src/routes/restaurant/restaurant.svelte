@@ -336,7 +336,7 @@
             <Link to="/">
                 <span class="material-symbols-rounded">arrow_back</span>
             </Link>
-            <span class="material-symbols-rounded">favorite</span>
+            <span on:click={addFavorite} class={(favorite?'validFavorite ':"")+"material-symbols-rounded"}>favorite</span>
         </div>
         {#if restaurantData.images.length > 0}
             <div class="caroussel">

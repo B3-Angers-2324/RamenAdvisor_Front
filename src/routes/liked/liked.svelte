@@ -34,7 +34,6 @@
             return res.json()
         })
         .then((data) => {
-            console.log("data", data)
             data.forEach(element => {
                 element.restaurant.foodtype = element.foodtype.imgId;
                 favorites = [...favorites, element.restaurant];
@@ -85,17 +84,15 @@
         </form>
     </div>
     <div id="container">
-        {#each Array(5) as i,_}
+        {#each favorites as favorite}
             <div id="restaurantCard" on:click={() => {}} on:keydown={() => {}} role="button" tabindex=0>
                 <img src="https://thispersondoesnotexist.com/" alt="restaurant"/>
                 <div class="info">
                     <div class="name">
-                        <h1>Au bon petit resto</h1>
+                        <h1>{favorite.name}</h1>
                     </div>
-                    <span class="material-symbols-rounded type">
-                        local_pizza
-                    </span>
-                    <p class="note">5/5</p>
+                    <img src={`${API_URL}/image/${favorite.foodtype}`} class="foodtype" alt="">
+                    <p class="note">{favorite.note/10}/5</p>
                 </div>
             </div>
         {/each}
