@@ -44,7 +44,6 @@
         .then((data) => {
             if (data.token) {
                 error = "";
-                // localStorage.setItem("token", data.token);
                 setTokentWithExpiry(data.token);
                 window.location.href = "/profile";
             } else {
