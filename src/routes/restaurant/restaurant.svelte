@@ -153,24 +153,39 @@
 
     onMount(() => {
         checkScreenSize();
+        checkFavorite();
     });
 
-    let error ;
+    let favorite;
 
     function addFavorite() {
-        // fetch(`${API_URL}/user/addFavorite`, {
-        //     method: "PATCH",
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': 'Bearer ' + localStorage.getItem('token')
-        //     },
-        //     body: JSON.stringify(id)
-        // })
-        // .then((res) => res.json())
-        // .then((data) => {
-        //     error = data.message;
-        // })
-        console.log("id: ", getId());
+        fetch(`${API_URL}/user/addOrDeleteFavorite/${getId()}`, {
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getTokenWithExpiry()
+            },
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            favorite = data.data == "add"?true:false
+        })
+    }
+
+    function checkFavorite () {
+        fetch(`${API_URL}/user/checkFavorite/${getId()}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getTokenWithExpiry()
+            },
+        })
+        .then((res) => {
+            return res.json()
+        })
+        .then((data) => {
+            favorite = data.data == "liked"?true:false
+        })
     }
 </script>
 
@@ -184,11 +199,13 @@
                 <span class="material-symbols-rounded">hide_image</span>
             </div>
         {/if}
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
         <div class="icon">
             <Link to="/">
                 <span class="material-symbols-rounded">arrow_back</span>
             </Link>
-            <span on:click={addFavorite} class="material-symbols-rounded">favorite</span>
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <span on:click={addFavorite} class={(favorite?'validFavorite ':"")+"material-symbols-rounded"}>favorite</span>
         </div>
         {#if restaurantData.images.length > 0}
             <div class="caroussel">
@@ -596,8 +613,13 @@
                     padding: 5px;
                     display: flex;
                     justify-content: center;
-                    align-items: center;    
+                    align-items: center;
+
+                    &.validFavorite  {
+                        color: var(--danger);
+                    }
                 }
+                
             }
 
             .caroussel {
@@ -1020,7 +1042,11 @@
                     padding: 5px;
                     display: flex;
                     justify-content: center;
-                    align-items: center;    
+                    align-items: center;
+
+                    &.validFavorite  {
+                        color: var(--danger);
+                    }
                 }
             }
 
