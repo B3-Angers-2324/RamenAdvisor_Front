@@ -1,7 +1,12 @@
 <script>
     import { Link } from "svelte-routing";
     import { onMount } from "svelte";
+    import { API_URL } from "../../main";
+    import App from "../../App.svelte";
+
     let mobile = window.matchMedia("(max-width: 768px)").matches;
+
+    let favorites = [];
 
     function checkScreenSize() {
         mobile = window.matchMedia("(max-width: 768px)").matches;
@@ -11,7 +16,30 @@
 
     onMount(() => {
         checkScreenSize();
+        getFavorite();
     });
+
+    async function getFavorite () {
+        fetch(`${API_URL}/user/getFavorite`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        })
+        .then((res) => {
+            if(res.status == 401){
+                window.location.href = '/';
+            }
+            return res.json()
+        })
+        .then((data) => {
+            data.forEach(element => {
+                favorites = [...favorites, element.restaurant];
+            });
+            console.log("favFront: ", favorites);
+        })
+    }
 </script>
 
 {#if mobile}
@@ -28,7 +56,7 @@
         </form>
     </div>
     <div id="container">
-        {#each Array(5) as i,_}
+        <!-- {#each Array(5) as i,_}
             <div id="restaurantCard" on:click={() => {}} on:keydown={() => {}} role="button" tabindex=0>
                 <img src="https://thispersondoesnotexist.com/" alt="restaurant"/>
                 <div class="info">
@@ -39,6 +67,20 @@
                         local_pizza
                     </span>
                     <p class="note">5/5</p>
+                </div>
+            </div>
+        {/each} -->
+        {#each favorites as favorite}
+            <div id="restaurantCard" on:click={() => {}} on:keydown={() => {}} role="button" tabindex=0>
+                <img src="https://thispersondoesnotexist.com/" alt="restaurant"/>
+                <div class="info">
+                    <div class="name">
+                        <h1>{favorite.name}</h1>
+                    </div>
+                    <span class="material-symbols-rounded type">
+                         {favorite.type}
+                    </span>
+                    <p class="note">{favorite.note/10}/5</p>
                 </div>
             </div>
         {/each}

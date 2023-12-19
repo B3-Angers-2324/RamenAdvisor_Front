@@ -8,6 +8,7 @@
     import Loadmore from "../../lib/loadmore.svelte";
 
     import BlankProfile from "../../assets/blank-profile.jpg";
+    import App from "../../App.svelte";
 
     function getId(){
         return  window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
@@ -153,6 +154,24 @@
     onMount(() => {
         checkScreenSize();
     });
+
+    let error ;
+
+    function addFavorite() {
+        // fetch(`${API_URL}/user/addFavorite`, {
+        //     method: "PATCH",
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': 'Bearer ' + localStorage.getItem('token')
+        //     },
+        //     body: JSON.stringify(id)
+        // })
+        // .then((res) => res.json())
+        // .then((data) => {
+        //     error = data.message;
+        // })
+        console.log("id: ", getId());
+    }
 </script>
 
 {#if mobile}
@@ -169,7 +188,7 @@
             <Link to="/">
                 <span class="material-symbols-rounded">arrow_back</span>
             </Link>
-            <span class="material-symbols-rounded">favorite</span>
+            <span on:click={addFavorite} class="material-symbols-rounded">favorite</span>
         </div>
         {#if restaurantData.images.length > 0}
             <div class="caroussel">
