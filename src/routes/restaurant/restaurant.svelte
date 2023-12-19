@@ -1,13 +1,15 @@
 <script>
     import { Link } from "svelte-routing";
     import Map from '../../lib/map.svelte';
-    import { API_URL, isConnected } from '../../main.js';
+    import { API_URL, isConnected, getTokenWithExpiry } from '../../main.js';
     import { onMount } from "svelte";
 
     import { navigate } from "svelte-routing";
     import Loadmore from "../../lib/loadmore.svelte";
 
     import BlankProfile from "../../assets/blank-profile.jpg";
+
+    getTokenWithExpiry();
 
     function getId(){
         return  window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
@@ -116,7 +118,7 @@
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                'Authorization': 'Bearer ' + getTokenWithExpiry()
             },
             body: JSON.stringify({
                 "message": textArea.value,

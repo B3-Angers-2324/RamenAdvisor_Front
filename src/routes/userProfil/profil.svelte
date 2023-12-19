@@ -3,7 +3,7 @@
 
     import CustomInput from '../../lib/customInput.svelte';
     import CustomSelect from "../../lib/customSelect.svelte";
-    import { API_URL } from "../../main";
+    import { API_URL, getTokenWithExpiry } from "../../main";
     import Modal from "../../lib/modal.svelte";
     import CropModal from "../../lib/cropper/cropModal.svelte";
     import { onMount } from "svelte";
@@ -45,7 +45,7 @@
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                'Authorization': 'Bearer ' + getTokenWithExpiry()
             }
             });
             let data = await response.json();
@@ -64,7 +64,7 @@
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    'Authorization': 'Bearer ' + getTokenWithExpiry()
                 }
             })
             .then((res) => {
@@ -95,7 +95,7 @@
                 method: "PATCH",
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    'Authorization': 'Bearer ' + getTokenWithExpiry()
                 },
                 body: JSON.stringify(information)
             })
@@ -115,7 +115,7 @@
                 method: "DELETE",
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    'Authorization': 'Bearer ' + getTokenWithExpiry()
                 }
             })
             .then((res) => {
@@ -141,7 +141,7 @@
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                'Authorization': 'Bearer ' + getTokenWithExpiry()
             }
         });
         if(response.ok){

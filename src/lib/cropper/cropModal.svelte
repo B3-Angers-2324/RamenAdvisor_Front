@@ -1,6 +1,6 @@
 <script>
     import Cropper from 'cropperjs';
-    import { API_URL } from "../../main";
+    import { API_URL, getTokenWithExpiry } from "../../main";
 
 	export let showModalPP; // boolean
     export let imageInput;
@@ -45,7 +45,7 @@
             fetch(`${API_URL}/user/pp`, {
                 method: "PATCH",
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    'Authorization': 'Bearer ' + getTokenWithExpiry()
                 },
                 body: formData,
             }).then((res) => res.json())
@@ -65,7 +65,7 @@
         //         method: "PATCH",
         //         headers: {
         //             'Content-Type': 'application/json',
-        //             'Authorization': 'Bearer ' + localStorage.getItem('token')
+        //             'Authorization': 'Bearer ' + getTokenWithExpiry()
         //         },
         //         body: JSON.stringify({
         //             image: dataURL,
