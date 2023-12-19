@@ -614,6 +614,7 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
+                    cursor: pointer;
 
                     &.validFavorite  {
                         color: var(--danger);
@@ -1043,6 +1044,7 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
+                    cursor: pointer;
 
                     &.validFavorite  {
                         color: var(--danger);

@@ -38,6 +38,7 @@
                 element.restaurant.foodtype = element.foodtype.imgId;
                 favorites = [...favorites, element.restaurant];
             });
+            console.log(favorites);
         })
     }
 </script>
@@ -50,15 +51,16 @@
         </Link>
     </div>
     <h1>Liked</h1>
-    <div id="input">
-        <form>
-            <input type="text" placeholder="Search">
-        </form>
-    </div>
     <div id="container">
         {#each favorites as favorite}
             <div id="restaurantCard" on:click={() => {}} on:keydown={() => {}} role="button" tabindex=0>
-                <img src="https://thispersondoesnotexist.com/" alt="restaurant"/>
+                {#if favorite.images}
+                    <img src={`${API_URL}/image/${favorite.images}`} alt="restaurant"/>
+                {:else}
+                    <div class="overlay always">
+                        <span class="material-symbols-rounded">hide_image</span>
+                    </div>
+                {/if}
                 <div class="info">
                     <div class="name">
                         <h1>{favorite.name}</h1>
@@ -78,15 +80,16 @@
         </Link>
     </div>
     <h1>Liked</h1>
-    <div id="input">
-        <form>
-            <input type="text" placeholder="Search">
-        </form>
-    </div>
     <div id="container">
         {#each favorites as favorite}
             <div id="restaurantCard" on:click={() => {}} on:keydown={() => {}} role="button" tabindex=0>
-                <img src="https://thispersondoesnotexist.com/" alt="restaurant"/>
+                {#if favorite.images}
+                    <img src={`${API_URL}/image/${favorite.images}`} alt="restaurant"/>
+                {:else}
+                    <div class="overlay always">
+                        <span class="material-symbols-rounded">hide_image</span>
+                    </div>
+                {/if}
                 <div class="info">
                     <div class="name">
                         <h1>{favorite.name}</h1>
@@ -148,10 +151,6 @@
             justify-items: center;
             align-items: center;
 
-            #restaurantCard:nth-last-child(1){
-                margin-bottom: 2em;
-            }
-
             #restaurantCard {
                 height: 6em;
                 width: 100%;
@@ -166,6 +165,24 @@
                 user-select: none;
                 display: flex;
                 align-items: center;
+
+                .overlay{
+                    background: rgba(0, 0, 0, 0.5); /* Black see-through */
+                    width: 6em;
+                    height: 6em;
+                    object-position: center;
+                    color: white;
+                    text-align: center;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;
+                    border-radius: var(--radius);
+
+                    span{
+                        font-size: 5em;
+                    }
+                }
 
                 .info {
                     width: 100%;
@@ -271,10 +288,6 @@
             justify-items: center;
             align-items: center;
 
-            #restaurantCard:nth-last-child(1){
-                margin-bottom: 2em;
-            }
-
             #restaurantCard {
                 height: 6em;
                 width: 100%;
@@ -289,6 +302,24 @@
                 user-select: none;
                 display: flex;
                 align-items: center;
+
+                .overlay{
+                    background: rgba(0, 0, 0, 0.5); /* Black see-through */
+                    width: 6em;
+                    height: 6em;
+                    object-position: center;
+                    color: white;
+                    text-align: center;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;
+                    border-radius: var(--radius);
+
+                    span{
+                        font-size: 5em;
+                    }
+                }
 
                 .info {
                     width: 100%;
