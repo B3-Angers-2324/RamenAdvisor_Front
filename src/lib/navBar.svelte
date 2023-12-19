@@ -2,7 +2,6 @@
     import { Link } from "svelte-routing";
 
     let accout_url = "register";
-    console.log(localStorage.getItem("token"));
     if(localStorage.getItem("token") != null){
         accout_url = "profile";
     }

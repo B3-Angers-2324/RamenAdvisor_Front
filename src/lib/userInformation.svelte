@@ -1,7 +1,7 @@
 <script>
     import CustomInput from "./customInput.svelte";
     import SHA256 from 'crypto-js/sha256';
-    import { API_URL } from "../main";
+    import { API_URL, setTokentWithExpiry } from "../main";
     import CustomSelect from "./customSelect.svelte";
 
     let name = "";
@@ -69,7 +69,8 @@
             .then((data) => {
                 if (data.token) {
                     error = "";
-                    localStorage.setItem("token", data.token);
+                    // localStorage.setItem("token", data.token);
+                    setTokentWithExpiry(data.token);
                     window.location.href = "/profile";
                 } else {
                     error = data.message;

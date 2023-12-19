@@ -1,7 +1,7 @@
 <script>   
   import { onMount, afterUpdate } from 'svelte';
   import { Link, navigate } from "svelte-routing";
-  import { API_URL } from "../../main";
+  import { API_URL, getTokenWithExpiry } from "../../main";
   import icon from "../../assets/icon.png";
 
   import 'leaflet/dist/leaflet.css';
@@ -19,10 +19,9 @@
   })
 
   let accout_url = "register";
-    console.log(localStorage.getItem("token"));
-    if(localStorage.getItem("token") != null){
-        accout_url = "profile";
-    }
+  if(getTokenWithExpiry() != null){
+    accout_url = "profile";
+  }
 
   //request the data from the API and update the list of restaurants for an url
   async function requestDataRestaurantFromAPI(url){
@@ -269,7 +268,7 @@
               <span class="material-symbols-rounded">
                   search
               </span>
-              <input type="text" placeholder="Search" bind:this={input} on:keydown={() => {}}/>
+              <input type="text" placeholder="Search" bind:this={input} on:click|stopPropagation={toggleFilterBar}  on:keydown={onKeypressInSearch}/>
           </div>
           <div id="filterBar" bind:this={filterBar}>
               <div class="filterItem">

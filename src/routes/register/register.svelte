@@ -5,7 +5,7 @@
     import logo from '../../assets/icon.png';
     import UserInformation from '../../lib/userInformation.svelte';
     import CustomInput from '../../lib/customInput.svelte';
-    import { API_URL } from "../../main";
+    import { API_URL, setTokentWithExpiry } from "../../main";
     import SHA256 from 'crypto-js/sha256';
     import { onMount } from "svelte";
 
@@ -44,7 +44,8 @@
         .then((data) => {
             if (data.token) {
                 error = "";
-                localStorage.setItem("token", data.token);
+                // localStorage.setItem("token", data.token);
+                setTokentWithExpiry(data.token);
                 window.location.href = "/profile";
             } else {
                 error = data.message;

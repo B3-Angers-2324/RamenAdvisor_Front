@@ -1,7 +1,7 @@
 <script>
     import { Link } from "svelte-routing";
     import Map from '../../lib/map.svelte';
-    import { API_URL, isConnected } from '../../main.js';
+    import { API_URL, isConnected, getTokenWithExpiry } from '../../main.js';
     import { onMount } from "svelte";
 
     import { navigate } from "svelte-routing";
@@ -9,6 +9,8 @@
 
     import BlankProfile from "../../assets/blank-profile.jpg";
     import App from "../../App.svelte";
+
+    getTokenWithExpiry();
 
     function getId(){
         return  window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
@@ -39,8 +41,6 @@
         }
         let data = await response.json();
         restaurantData = data.obj;
-        // console.log("restaurantData :",restaurantData);
-        // console.log("restaurantData.detailNote :",restaurantData.detailNote);
 
         //get percentage of each note
         fetch(`${API_URL}/restaurant/id/${getId()}`,{
@@ -119,7 +119,7 @@
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                'Authorization': 'Bearer ' + getTokenWithExpiry()
             },
             body: JSON.stringify({
                 "message": textArea.value,
@@ -360,6 +360,37 @@
           />
         </div>
     </div>
+    {#if isConnected()}
+    <div id="postCommentContainer">
+        <h3>Votre Commentaire</h3>
+        <form on:submit|preventDefault={newComment}>
+            <textarea bind:this={textArea} on:input={adjustHeight} name="comment" id="comment" placeholder="Votre commentaire..." required></textarea>  
+            <div class="rating">
+                <input checked={selectedNote===5} on:change={onChangeNote} name="stars" id="e5" type="radio" value="5" required>
+                <label for="e5">
+                    <span class="material-symbols-rounded">star</span>
+                </label>
+                <input checked={selectedNote===4} on:change={onChangeNote} name="stars" id="e4" type="radio" value="4" required>
+                <label for="e4">
+                    <span class="material-symbols-rounded">star</span>
+                </label>
+                <input checked={selectedNote===3} on:change={onChangeNote} name="stars" id="e3" type="radio" value="3" required>
+                <label for="e3">
+                    <span class="material-symbols-rounded">star</span>
+                </label>
+                <input checked={selectedNote===2} on:change={onChangeNote} name="stars" id="e2" type="radio" value="2" required>
+                <label for="e2">
+                    <span class="material-symbols-rounded">star</span>
+                </label>
+                <input checked={selectedNote===1} on:change={onChangeNote} name="stars" id="e1" type="radio" value="1" required>
+                <label for="e1">
+                    <span class="material-symbols-rounded">star</span>
+                </label>
+            </div>
+            <button type="submit">Envoyer</button>
+        </form>
+    </div>  
+    {/if}
     <div id="avisContainer">
         <h2>Avis</h2>
         <div class="avisFilter">
@@ -835,6 +866,107 @@
         width: 50%;
         height: 100%;
         padding: var(--spacing) 25%;
+
+        #postCommentContainer{
+            margin-top: var(--spacing);
+            background-color: var(--zomp);
+            display: flex;
+            flex-direction: column;
+            gap: calc(var(--spacing) / 2);
+            padding: calc(var(--spacing) / 2);
+            justify-content: center;
+            align-items: center;
+            border-radius: var(--radius);
+            position: relative;
+
+            h3{
+                color: var(--black);
+                font-size: 1.2em;
+            }
+
+            form{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: calc(var(--spacing) / 2);
+
+                textarea{
+                    width: calc(100% - var(--spacing));
+                    min-height: 3em;
+                    max-height: 10em;
+                    border-radius: var(--radius);
+                    background-color: var(--bone);
+                    border: none;
+                    outline: none;
+                    padding: calc(var(--spacing) / 2);
+                    resize: none;
+                    color: var(--black);
+                    font-size: 1em;
+                    font-family: 'Poppins', sans-serif;
+                    overflow-y: auto;
+                }
+
+                .rating {
+                    width: 100%;
+                    overflow: hidden;
+                    display: flex;
+                    justify-content: center;
+                    direction: rtl;
+                    
+                    
+                    input {
+                        float: right;
+                        opacity: 0;
+                        position: absolute;
+                    }
+
+                    a, label {
+                        float:right;
+                        color: var(--cambridge-blue);
+                        text-decoration: none;
+                        -webkit-transition: color .4s;
+                        -moz-transition: color .4s;
+                        -o-transition: color .4s;
+                        transition: color .4s;
+                        display: flex;
+                        justify-content: center;
+
+                        span{
+                            font-size: 3em;
+                        }
+                    }
+
+                    label:hover ~ label,
+                    input:focus ~ label,
+                    label:hover,
+                    a:hover,
+                    a:hover ~ a,
+                    a:focus,
+                    a:focus ~ a{
+                        color: var(--brunswick-green);
+                        cursor: pointer;
+                    }
+                }
+                .rating2 {
+                    direction: rtl;
+                    a {
+                        float:none
+                    }
+                }
+
+                button{
+                    width: 100%;
+                    height: 3em;
+                    border-radius: var(--radius);
+                    background-color: var(--brunswick-green);
+                    color: var(--bone);
+                    font-size: 1em;
+                    border: none;
+                    outline: none;
+                    cursor: pointer;
+                }
+            }
+        }
 
         #restauImg{
             width: 100%;
