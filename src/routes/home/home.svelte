@@ -40,6 +40,9 @@
     .then((data) => {
       let listProv = [];
       data.obj.forEach((restaurant,i) => {
+        if (restaurant.id === undefined){
+          restaurant.id = restaurant._id;
+        }
         listProv.push(restaurant.position);
         //At the end of the loop, we update the list
         if(i >= data.obj.length-1){
