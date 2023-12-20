@@ -230,13 +230,15 @@
                 </span>
             </Link>
         </button>
-        <button>
-          <Link to="/liked">
-            <span class="material-symbols-rounded">
-                favorite
-            </span>
-          </Link>
-        </button>
+        {#if getTokenWithExpiry() != null}
+          <button>
+            <Link to="/liked">
+              <span class="material-symbols-rounded">
+                  favorite
+              </span>
+            </Link>
+          </button>
+        {/if}
         <button>
             <Link to={accout_url}>
                 <span class="material-symbols-rounded">
@@ -289,13 +291,15 @@
           </div>
       </div>
       <div id="navBtns">
-          <button>
-            <Link to="/liked">
-              <span class="material-symbols-rounded">
-                  favorite
-              </span>
-            </Link>
-          </button>
+          {#if getTokenWithExpiry() != null}
+            <button>
+              <Link to="/liked">
+                <span class="material-symbols-rounded">
+                    favorite
+                </span>
+              </Link>
+            </button>
+          {/if}
           <button>
               <Link to={accout_url}>
                   <span class="material-symbols-rounded">
