@@ -44,7 +44,6 @@
         }
         let data = await response.json();
         restaurantData = data.obj;
-        console.log(restaurantData);
 
         //get percentage of each note
         fetch(`${API_URL}/restaurant/id/${getId()}`,{
@@ -157,7 +156,7 @@
 
     onMount(() => {
         checkScreenSize();
-        checkFavorite();
+        if(isConnected()) checkFavorite();
     });
 
     let favorite;
@@ -209,7 +208,9 @@
                 <span class="material-symbols-rounded">arrow_back</span>
             </Link>
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <span on:click={addFavorite} class={(favorite?'validFavorite ':"")+"material-symbols-rounded"}>favorite</span>
+            {#if isConnected()}
+                <span on:click={addFavorite} class={(favorite?'validFavorite ':"")+"material-symbols-rounded"}>favorite</span>
+            {/if}
         </div>
         {#if restaurantData.images.length > 0}
             <div class="caroussel">
@@ -346,7 +347,11 @@
             <Link to="/">
                 <span class="material-symbols-rounded">arrow_back</span>
             </Link>
-            <span on:click={addFavorite} class={(favorite?'validFavorite ':"")+"material-symbols-rounded"}>favorite</span>
+            <!-- svelte-ignore a11y-no-static-element-interactions -->
+            {#if isConnected()}
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <span on:click={addFavorite} class={(favorite?'validFavorite ':"")+"material-symbols-rounded"}>favorite</span>
+            {/if}
         </div>
         {#if restaurantData.images.length > 0}
             <div class="caroussel">
