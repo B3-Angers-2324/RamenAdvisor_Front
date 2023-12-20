@@ -35,11 +35,16 @@
         })
         .then((data) => {
             data.forEach(element => {
+                console.log(element)
                 element.restaurant.foodtype = element.foodtype.imgId;
                 favorites = [...favorites, element.restaurant];
             });
             console.log(favorites);
         })
+    }
+
+    async function navigateToRestaurant (id) {
+        window.location.href = `/restaurant/${id}`;
     }
 </script>
 
@@ -53,7 +58,7 @@
     <h1>Liked</h1>
     <div id="container">
         {#each favorites as favorite}
-            <div id="restaurantCard" on:click={() => {}} on:keydown={() => {}} role="button" tabindex=0>
+            <div id="restaurantCard" on:click={() => navigateToRestaurant(favorite._id)} on:keydown={() => {}} role="button" tabindex=0>
                 {#if favorite.images}
                     <img src={`${API_URL}/image/${favorite.images}`} alt="restaurant"/>
                 {:else}
@@ -82,7 +87,7 @@
     <h1>Liked</h1>
     <div id="container">
         {#each favorites as favorite}
-            <div id="restaurantCard" on:click={() => {}} on:keydown={() => {}} role="button" tabindex=0>
+            <div id="restaurantCard" on:click={() => navigateToRestaurant(favorite._id)} on:keydown={() => {}} role="button" tabindex=0>
                 {#if favorite.images}
                     <img src={`${API_URL}/image/${favorite.images}`} alt="restaurant"/>
                 {:else}
