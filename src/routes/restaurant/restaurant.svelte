@@ -556,7 +556,8 @@
                     a:hover,
                     a:hover ~ a,
                     a:focus,
-                    a:focus ~ a{
+                    a:focus ~ a,
+                    input[type="radio"]:checked ~ label {
                         color: var(--brunswick-green);
                         cursor: pointer;
                     }
@@ -987,7 +988,8 @@
                     a:hover,
                     a:hover ~ a,
                     a:focus,
-                    a:focus ~ a{
+                    a:focus ~ a,
+                    input[type="radio"]:checked ~ label {
                         color: var(--brunswick-green);
                         cursor: pointer;
                     }
